@@ -2,8 +2,16 @@ import { StatusBar } from "expo-status-bar";
 import { Image, StyleSheet, Text, View, Dimensions, Button } from "react-native";
 import { HomeScreenCategoriaclList, HomeScreenSuggestList, ImageButton, SearchBarHome } from "../component/home-screen-comp";
 import { ScrollView } from "react-native-gesture-handler";
+import theme from "../theme";
 const screenWidth = Dimensions.get('window').width;
 
+
+const TitleViewCategoricalList = () => (
+    <View style={styles.titleViewCatgoricalList}>
+        <Text style={styles.titleViewCatgoricalList.text}>Amazing     </Text>
+        <Text style={styles.titleViewCatgoricalList.text}>   Suggests </Text>
+    </View>
+)
 
 export default function HomeScreen() {
 
@@ -12,9 +20,9 @@ export default function HomeScreen() {
             <SearchBarHome />
             <ScrollView>
 
-                <Image source={require('../assets/p1.png')} style={{ width: 360, height: 200, alignSelf: 'center', borderRadius: 15 }} />
+                <Image source={require('../assets/p1.png')} style={styles.bannerImage} />
 
-                <View style={{ width: screenWidth, flexDirection: 'row', justifyContent: 'space-between', padding: 20 }}>
+                <View style={styles.imageButtonStyles}>
 
                     <ImageButton src={{ uri: 'https://dkstatics-public.digikala.com/digikala-bellatrix/d0dc31c892be8cf1408e4e14580b3f479da66bd1_1648897133.png' }} title="MDI Jet" />
 
@@ -25,18 +33,13 @@ export default function HomeScreen() {
 
                 </View>
                 <HomeScreenCategoriaclList
-                    hadleTitleView={
-                        <View style={{ paddingTop: 30 }}>
-                            <Text style={{ fontFamily: 'Roboto', color: 'white', fontSize: 30, fontWeight: 'bold' }}>Amazing     </Text>
-                            <Text style={{ fontFamily: 'Roboto', color: 'white', fontSize: 30, fontWeight: 'bold' }}>   Suggests </Text>
-                        </View>
-                    }
+                    hadleTitleView={<TitleViewCategoricalList />}
                     imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
                     urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6"
-                    backColor="#3700b3"
+                    backColor={theme.colors.primary}
 
                 />
-                <View style={{ width: screenWidth, flexDirection: 'row', justifyContent: 'space-between', padding: 20 }} >
+                <View style={styles.imageButtonStyles} >
 
                     <ImageButton src={{ uri: 'https://dkstatics-public.digikala.com/digikala-bellatrix/d0dc31c892be8cf1408e4e14580b3f479da66bd1_1648897133.png' }} title="MDI Jet" />
 
@@ -48,15 +51,10 @@ export default function HomeScreen() {
                 </View>
 
                 <HomeScreenCategoriaclList
-                    hadleTitleView={
-                        <View style={{ margin: 10, paddingTop: 20 }}>
-                            <Text style={{ fontFamily: 'Roboto', color: 'white', fontSize: 30 }}>Amazing     </Text>
-                            <Text style={{ fontFamily: 'Roboto', color: 'white', fontSize: 30 }}>   Suggests </Text>
-                        </View>
-                    }
+                    hadleTitleView={<TitleViewCategoricalList />}
                     imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
                     urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6"
-                    backColor="#008302"
+                    backColor={theme.colors.primary}
                 />
 
                 <StatusBar style="auto" />
@@ -74,10 +72,25 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
     },
-    box: {
-        width: 100,
-        height: 100,
-        backgroundColor: 'blue',
-
+    bannerImage: {
+        width: 360,
+        height: 200,
+        alignSelf: 'center',
+        borderRadius: theme.raduis.large,
+    },
+    imageButtonStyles: {
+        width: screenWidth,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: theme.spacing.medium,
+    },
+    titleViewCatgoricalList: {
+        margin: theme.spacing.small,
+        paddingTop: theme.spacing.large,
+        text: {
+            fontFamily: theme.typography.fontFamily,
+            color: 'white',
+            fontSize: 30,
+        }
     }
 })

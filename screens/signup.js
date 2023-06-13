@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { login } from '../reducers/authReducer';
 import { saveUserSession } from '../utils';
 import * as SecureStore from 'expo-secure-store';
+import theme from '../theme';
 
 
 export default function SingupScreen() {
@@ -63,29 +64,6 @@ export default function SingupScreen() {
         }
         setIsLoading(true)
 
-
-        // const response = await fetch('https://mdi80nz.pythonanywhere.com/api/users/', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         username: username,
-        //         password: password,
-        //         email: email,
-        //     }),
-        // });
-        // const data = await response.json()
-
-        // if (response.ok) {
-        //     dispatch(login({ user: data['token'] }))
-        //     saveUserSession(data['token'])
-        //     navigation.navigate('Home')
-        // } else {
-        //     setErrorMessage(JSON.stringify(data))
-        // }
-
-
         fetch('https://mdi80nz.pythonanywhere.com/api/users/', {
             method: 'POST',
             headers: {
@@ -134,7 +112,7 @@ export default function SingupScreen() {
                 style={styles.mainImage}
                 source={require('../assets/first-page-icon.png')} />
 
-            <View>
+            <View style={{ alignItems: 'center' }}>
                 <Text style={styles.message}>{errorMessage}</Text>
 
                 <View style={styles.nameContainerView}>
@@ -154,14 +132,14 @@ export default function SingupScreen() {
             </View>
 
 
-            <TouchableOpacity style={styles.loginBtn} activeOpacity={0.7} onPress={onSignupClicked} disabled={isLoading}>
+            <TouchableOpacity style={styles.signupBtn} activeOpacity={0.7} onPress={onSignupClicked} disabled={isLoading}>
                 {isLoading ? (<ActivityIndicator size='small' color="#3700b3" />) : (
-                    <Text style={styles.loginBtn.text}>Sign up</Text>
+                    <Text style={styles.signupBtn.text}>Sign up</Text>
                 )}
 
             </TouchableOpacity>
-            <TouchableOpacity style={styles.signupBtn} activeOpacity={0.7} onPress={onLoginClicked} >
-                <Text style={styles.signupBtn.text}>You have an account?</Text>
+            <TouchableOpacity style={styles.loginBtn} activeOpacity={0.7} onPress={onLoginClicked} >
+                <Text style={styles.loginBtn.text}>You have an account?</Text>
             </TouchableOpacity>
             <StatusBar style="auto" />
 
@@ -173,70 +151,69 @@ export default function SingupScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#5C6BC0',
+        backgroundColor: theme.colors.primary,
         alignItems: 'center',
         textAlign: 'center',
         paddingTop: 100,
     },
     nameContainerView: {
         marginBottom: 10,
+        width: 210,
         flexDirection: 'row',
         input: {
             flex: 6,
             borderWidth: 1,
-            borderRadius: 10,
+            borderRadius: theme.raduis.medium,
             borderColor: '#ffffff36',
-            padding: 10,
+            padding: theme.spacing.small,
             height: 40,
-
         },
     },
     mainImage: {
         width: 100,
         height: 100,
-        marginBottom: 40,
+        marginBottom: 2 * theme.spacing.large,
         alignSelf: 'center',
     },
     message: {
         textAlign: 'center',
         padding: 10,
-        color: '#EC407A',
+        color: theme.colors.error,
         fontWeight: 'bold',
-        fontSize: 13,
+        fontSize: theme.typography.fontSize.small,
         width: 250,
     },
     input: {
-        width: 250,
+        width: 210,
         borderWidth: 1,
-        borderRadius: 10,
+        borderRadius: theme.raduis.medium,
         borderColor: '#ffffff36',
         padding: 10,
         height: 40,
         marginBottom: 10,
     },
-    loginBtn: {
+    signupBtn: {
         color: 'white',
-        backgroundColor: '#9FA8DA',
-        padding: 10,
+        backgroundColor: theme.colors.secondary,
+        padding: 15,
         marginTop: 20,
         width: 125,
         alignItems: 'center',
-        borderRadius: 10,
+        borderRadius: theme.raduis.large,
         text: {
-            color: "white",
-            fontSize: 17,
-            fontFamily: 'Roboto'
+            color: theme.colors.primary,
+            fontSize: theme.typography.fontSize.button,
+            fontFamily: theme.typography.fontFamily,
         }
     },
 
-    signupBtn: {
+    loginBtn: {
         color: 'white',
         padding: 10,
         alignSelf: 'center',
-        borderRadius: 10,
         text: {
             color: "white",
-            fontSize: 13,
+            fontSize: theme.typography.fontSize.small,
             fontFamily: 'Roboto'
         }
     }
