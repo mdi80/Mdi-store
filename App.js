@@ -52,7 +52,7 @@ function AppContainer() {
 
         } catch (error) {
           console.error('Error:', error);
-          dispatch(setError(true))
+          dispatch(setError({ networkError: true }))
         }
 
       }
@@ -87,7 +87,10 @@ function AppContainer() {
           }
 
           {error ?
-            <ErrorScreen />
+            <Stack.Screen name="ErrorScreen" component={ErrorScreen} options={{
+              headerShown: false
+            }} />
+
             :
             <>
               <Stack.Screen name="Home" component={HomeScreen} options={{

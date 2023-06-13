@@ -32,11 +32,11 @@ export default function HomeScreen() {
                         </View>
                     }
                     imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
-                    urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6"
+                    urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-pram/?amazing?rows=6"
                     backColor="#3700b3"
 
                 />
-                <View style={{ width: screenWidth, flexDirection: 'row', justifyContent: 'space-between', padding: 20 }}>
+                <View style={{ width: screenWidth, flexDirection: 'row', justifyContent: 'space-between', padding: 20 }} >
 
                     <ImageButton src={{ uri: 'https://dkstatics-public.digikala.com/digikala-bellatrix/d0dc31c892be8cf1408e4e14580b3f479da66bd1_1648897133.png' }} title="MDI Jet" />
 

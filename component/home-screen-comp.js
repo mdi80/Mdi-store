@@ -35,6 +35,7 @@ const SearchOpen = (props) => {
     }, []);
 
     const clickOutside = () => {
+
         inputtext.current.blur()
     }
     return (
@@ -190,7 +191,7 @@ export const HomeScreenCategoriaclList = (props) => {
             setData(json)
         }).catch(error => {
             console.log(error);
-            dispatch(setError(true))
+            dispatch(setError({ networkError: true }))
         })
 
     }
@@ -314,14 +315,12 @@ const stylesCategoriaclList = StyleSheet.create({
 })
 
 
-
-
 export const ImageButton = (props) => {
-
+    const dispatch = useDispatch();
 
     return (
         <TouchableOpacity style={{ ...props.style, width: 90, height: 100, alignItems: 'center', justifyContent: 'center' }} activeOpacity={0.7} >
-            <Image source={props.src} style={{ width: 60, height: 60 }} />
+            <Image source={props.src} style={{ width: 60, height: 60 }} onError={() => dispatch(setError({ networkError: true }))} />
             <Text style={{ fontWeight: 400, fontSize: 14, padding: 5 }}>{props.title}</Text>
         </TouchableOpacity>
     )
