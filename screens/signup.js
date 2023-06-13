@@ -173,7 +173,7 @@ export default function SingupScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#3700b3',
+        backgroundColor: '#5C6BC0',
         alignItems: 'center',
         textAlign: 'center',
         paddingTop: 100,
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
         input: {
             flex: 6,
             borderWidth: 1,
-            borderRadius: 3,
+            borderRadius: 10,
             borderColor: '#ffffff36',
             padding: 10,
             height: 40,
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     message: {
         textAlign: 'center',
         padding: 10,
-        color: '#B71c1c',
+        color: '#EC407A',
         fontWeight: 'bold',
         fontSize: 13,
         width: 250,
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     input: {
         width: 250,
         borderWidth: 1,
-        borderRadius: 3,
+        borderRadius: 10,
         borderColor: '#ffffff36',
         padding: 10,
         height: 40,
@@ -216,10 +216,12 @@ const styles = StyleSheet.create({
     },
     loginBtn: {
         color: 'white',
-        backgroundColor: '#018786',
+        backgroundColor: '#9FA8DA',
         padding: 10,
-        width: 250,
+        marginTop: 20,
+        width: 125,
         alignItems: 'center',
+        borderRadius: 10,
         text: {
             color: "white",
             fontSize: 17,
@@ -231,6 +233,7 @@ const styles = StyleSheet.create({
         color: 'white',
         padding: 10,
         alignSelf: 'center',
+        borderRadius: 10,
         text: {
             color: "white",
             fontSize: 13,
