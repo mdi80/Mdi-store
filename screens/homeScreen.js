@@ -32,7 +32,7 @@ export default function HomeScreen() {
                         </View>
                     }
                     imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
-                    urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-pram/?amazing?rows=6"
+                    urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6"
                     backColor="#3700b3"
 
                 />
