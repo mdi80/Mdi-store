@@ -21,9 +21,8 @@ const Stack = createStackNavigator()
 
 function AppContainer() {
 
-  const isLoggedin = true//useSelector(state => state.auth.isLogin)
-  const [isLoading, setIsLoading] = useState(false)
-  const [retry, setRetry] = useState(false)
+  const isLoggedin = true//TODO must be : useSelector(state => state.auth.isLogin)
+  const [isLoading, setIsLoading] = useState(false)//TODO must be false
 
   dispatch = useDispatch()
   error = useSelector(state => state.app.networkError)
@@ -52,7 +51,7 @@ function AppContainer() {
 
         } catch (error) {
           console.error('Error:', error);
-          dispatch(setError(true))
+          dispatch(setError({ networkError: true }))
         }
 
       }
@@ -69,12 +68,7 @@ function AppContainer() {
           <Image
             style={styles.mainImage}
             source={require('./assets/first-page-icon.png')} />
-          {
-            retry ?
-              <Button title='retry' />
-              :
-              <ActivityIndicator size={50} color="#fff" />
-          }
+          <ActivityIndicator size={50} color="#fff" />
           <StatusBar style="auto" />
         </View>
         :
@@ -87,7 +81,10 @@ function AppContainer() {
           }
 
           {error ?
-            <ErrorScreen />
+            <Stack.Screen name="ErrorScreen" component={ErrorScreen} options={{
+              headerShown: false
+            }} />
+
             :
             <>
               <Stack.Screen name="Home" component={HomeScreen} options={{

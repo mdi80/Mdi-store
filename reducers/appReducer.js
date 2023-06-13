@@ -9,7 +9,7 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setError: (state, action) => {
-            state.error = action.payload.error;
+            state.networkError = action.payload.networkError;
         }
     }
 })
