@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { login } from '../reducers/authReducer';
 import { saveUserSession } from '../utils';
 import * as SecureStore from 'expo-secure-store';
+import theme from '../theme';
 
 
 export default function LoginScreen() {
@@ -75,12 +76,12 @@ export default function LoginScreen() {
                 style={styles.mainImage}
                 source={require('../assets/first-page-icon.png')} />
 
-            <View>
+            <View style={{ alignItems: 'center' }}>
                 <Text style={styles.message}>{errorMessage}</Text>
 
                 <TextInput ref={usernameInput} returnKeyType='next' onSubmitEditing={() => passwordInput.current?.focus()}
-                    style={styles.input} placeholder='Username' backgroundColor="#eee" value={username} onChangeText={setUsername} />
-                <TextInput ref={passwordInput} returnKeyType='done' style={styles.input} placeholder='Password' secureTextEntry={true} backgroundColor="#eee" value={password} onChangeText={setPassword} />
+                    style={styles.input} placeholder='Username' value={username} onChangeText={setUsername} />
+                <TextInput ref={passwordInput} returnKeyType='done' style={styles.input} placeholder='Password' secureTextEntry={true} value={password} onChangeText={setPassword} />
 
             </View>
 
@@ -102,32 +103,29 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#3700b3',
+        backgroundColor: theme.colors.primary,
         alignItems: 'center',
         paddingTop: 200,
     },
     mainImage: {
-        width: 100,
-        height: 100,
+        width: 150,
+        height: 150,
         marginBottom: 40,
-    },
-    loginText: {
-        fontSize: 30,
-        color: '#fff',
-        fontWeight: 'bold',
     },
     message: {
         textAlign: 'center',
         padding: 10,
-        color: '#B71c1c',
+        color: theme.colors.error,
         fontWeight: 'bold',
-        fontSize: 13,
+        fontSize: theme.typography.fontSize.small,
         width: 250,
     },
     input: {
-        width: 250,
+        width: 210,
         borderWidth: 1,
-        borderRadius: 3,
+        borderRadius: theme.raduis.medium,
+        backgroundColor: "#E8EAF6",
+        color: "#455A64",
         borderColor: '#ffffff36',
         padding: 10,
         height: 40,
@@ -135,13 +133,15 @@ const styles = StyleSheet.create({
     },
     loginBtn: {
         color: 'white',
-        backgroundColor: '#018786',
-        padding: 10,
-        width: 250,
+        backgroundColor: theme.colors.secondary,
+        padding: 15,
+        marginTop: theme.spacing.large,
+        width: 125,
+        borderRadius: theme.raduis.large,
         alignItems: 'center',
         text: {
-            color: "white",
-            fontSize: 17,
+            color: theme.colors.primary,
+            fontSize: theme.typography.fontSize.button,
             fontFamily: 'Roboto'
         }
     },
@@ -152,8 +152,8 @@ const styles = StyleSheet.create({
 
         text: {
             color: "white",
-            fontSize: 13,
-            fontFamily: 'Roboto'
+            fontSize: theme.typography.fontSize.small,
+            fontFamily: theme.typography.fontFamily
         }
     }
 

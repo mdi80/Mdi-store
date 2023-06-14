@@ -14,6 +14,7 @@ import * as SecureStore from 'expo-secure-store';
 import HomeScreen, { HomeHeader } from './screens/homeScreen';
 import ErrorScreen from './screens/errorScreen';
 import { setError } from './reducers/appReducer';
+import theme from './theme';
 
 const Stack = createStackNavigator()
 
@@ -116,7 +117,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#3700b3',
+    backgroundColor: theme.colors.primary,
     alignItems: 'center',
     padding: 200,
     justifyContent: 'space-between',
@@ -125,11 +126,5 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     marginBottom: 40,
-  },
-  text: {
-    color: 'white',
-    width: 100,
-    height: 20,
-    fontSize: 20,
   }
 })

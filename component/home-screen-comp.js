@@ -10,6 +10,7 @@ import Animated, {
     withTiming,
     useAnimatedStyle,
 } from 'react-native-reanimated';
+import theme from "../theme";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -44,7 +45,7 @@ const SearchOpen = (props) => {
                 <View style={{ ...stylesSearchbar.searchBarRoot, flex: 1 }}>
 
                     <View style={{ ...stylesSearchbar.searchBarRoot.textinputview }} >
-                        <TouchableOpacity onPress={handleBackPress}>
+                        <TouchableOpacity onPress={handleBackPress} style={{ padding: 5 }}>
                             <MaterialIcon name="arrow-back" size={25} color="#000" />
                         </TouchableOpacity>
                         <TextInput autoFocus={true} ref={inputtext} placeholder="Search" keyboardType="ascii-capable" style={stylesSearchbar.searchBarRoot.inputText} focusable={true} />
@@ -76,7 +77,7 @@ export const SearchBarHome = (props) => {
                     <TouchableOpacity style={stylesSearchbar.searchBarRoot.searcharTouch} activeOpacity={0.7} onPress={searchClicked}>
                         <Icon name="search" size={20} style={stylesSearchbar.searchBarRoot.iconSearch} />
                         <Text style={stylesSearchbar.searchBarRoot.text}>
-                            Search in <Text style={{ color: 'red' }}>MDI STORE</Text>
+                            Search in <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>MDI STORE</Text>
                         </Text>
 
                     </TouchableOpacity>
@@ -102,9 +103,9 @@ const stylesSearchbar = StyleSheet.create({
 
         text: {
             color: '#777',
-            fontSize: 20,
+            fontSize: theme.typography.fontSize.header,
             margin: 10,
-            fontFamily: 'Roboto',
+            fontFamily: theme.typography.fontFamily,
             marginLeft: 0,
         },
         searcharTouch: {
@@ -112,7 +113,7 @@ const stylesSearchbar = StyleSheet.create({
             marginTop: 40,
             height: 50,
             alignItems: 'center',
-            borderRadius: 6,
+            borderRadius: theme.raduis.medium,
             backgroundColor: '#f2f2f2',
             flexDirection: 'row',
         },
@@ -123,28 +124,23 @@ const stylesSearchbar = StyleSheet.create({
         textinputview: {
             margin: 15,
             marginTop: 45,
-            padding: 10,
-            height: 45,
-            borderRadius: 6,
+            padding: 5,
+            height: 50,
             backgroundColor: '#fff',
             flexDirection: 'row',
             alignItems: 'center',
-            borderRadius: 0,
             borderBottomWidth: 1,
             borderBottomColor: '#00aaff'
         },
         inputText: {
             padding: 5,
             flex: 1,
-            fontSize: 16,
+            fontSize: theme.typography.fontSize.button,
             marginLeft: 10,
             height: 35,
         }
     }
 })
-
-
-
 
 
 export const HomeScreenCategoriaclList = (props) => {
@@ -206,27 +202,29 @@ export const HomeScreenCategoriaclList = (props) => {
             <Animated.View style={[{ ...stylesCategoriaclList.container, backgroundColor: props.backColor }, animatedStyle]}>
 
                 <ScrollView horizontal={true} style={{ height: '100%' }} showsHorizontalScrollIndicator={false}>
-                    <View style={{ justifyContent: 'space-between', height: '100%', alignItems: 'center', paddingRight: 10, paddingLeft: 10 }}>
+                    <View style={stylesCategoriaclList.titleItem}>
                         {props.hadleTitleView}
-                        <Image source={{ uri: props.imageuri }} style={{
-                            width: 150
-                            , height: 150,
-                            borderRadius: 10,
-                        }} />
-                        <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <Image source={{ uri: props.imageuri }} style={stylesCategoriaclList.titleItem.imageTitle} />
+                        <TouchableOpacity style={stylesCategoriaclList.titleItem.btn}>
                             <Text style={{ color: 'white' }}>See All</Text>
                             <MaterialIcon name="arrow-right" size={25} color="white" />
                         </TouchableOpacity>
                     </View>
                     {
-                        data.map((item, index) => <CategoricalItem key={index} item={{ ...item, recDays: 1 }} index={index} setLoadingImage={setLoadingImage} />)
+                        data.map((item, index) =>
+                            <CategoricalItem
+                                key={index}
+                                item={{ ...item, recDays: 1 }}
+                                index={index}
+                                setLoadingImage={setLoadingImage} />
+                        )
                     }
                     {data.length >= 6 &&
                         <View style={stylesCategoriaclList.itemView}>
-                            <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', alignItems: 'center', flex: 1 }}>
+                            <View style={stylesCategoriaclList.itemViewSeeMore}>
 
-                                <Icon name="arrow-alt-circle-right" size={50} color="#cc3434" />
-                                <Text style={{ fontFamily: 'Roboto', fontSize: 18, padding: 5, fontWeight: 'bold' }}>See All</Text>
+                                <Icon name="arrow-alt-circle-right" size={50} color={theme.colors.primary} />
+                                <Text style={stylesCategoriaclList.itemViewSeeMore.btn}>See All</Text>
                             </View>
                         </View>
                     }
@@ -236,7 +234,6 @@ export const HomeScreenCategoriaclList = (props) => {
         </>
     )
 }
-33
 
 const CategoricalItem = ({ item, setLoadingImage, index }) => {
     const handleLoadStart = (index) => {
@@ -257,12 +254,22 @@ const CategoricalItem = ({ item, setLoadingImage, index }) => {
     return (
         <TouchableOpacity style={stylesCategoriaclList.itemView} activeOpacity={1}>
             <View>
+                <Image
+                    source={{ uri: item.image[0].image }}
+                    style={stylesCategoriaclList.imageItem}
+                    onLoadStart={() => handleLoadStart(index)}
+                    onLoad={() => handleLoad(index)} />
 
-                <Image source={{ uri: item.image[0].image }} style={{ width: 150, height: 150, alignSelf: 'center' }} onLoadStart={() => handleLoadStart(index)} onLoad={() => handleLoad(index)} />
-                <Text style={{ maxWidth: '100%', fontSize: 15, fontFamily: 'Roboto', margin: 10 }} numberOfLines={2} ellipsizeMode="tail">{item.title}</Text>
+                <Text
+                    style={stylesCategoriaclList.titleTextItem}
+                    numberOfLines={2}
+                    ellipsizeMode="tail">
+                    {item.title}
+                </Text>
             </View>
+
             <View style={{ flexDirection: 'row' }}>
-                <Icon name="rocket" size={15} color="#cc3434" />
+                <Icon name="rocket" size={15} color={theme.colors.primary} />
                 {item.recDays == 1 ?
                     <Text style={{ color: 'gray', marginLeft: 10 }}>
                         Send tomorrow
@@ -280,12 +287,21 @@ const CategoricalItem = ({ item, setLoadingImage, index }) => {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
                     <View>
-                        <Text style={{ maxWidth: '100%', fontSize: 15, fontFamily: 'Roboto', fontWeight: 'bold' }} ellipsizeMode="tail">{parseFloat(item.price - item.discount)} $</Text>
-                        <Text style={{ maxWidth: '100%', color: 'gray', fontSize: 12, fontFamily: 'Roboto', textDecorationLine: 'line-through' }} ellipsizeMode="tail">{parseFloat(item.price)} $</Text>
+                        <Text
+                            style={stylesCategoriaclList.textPriceItem}
+                            ellipsizeMode="tail">
+                            {parseFloat(item.price - item.discount) + " $"}
+                        </Text>
+                        <Text
+                            style={stylesCategoriaclList.textPrimaryPriceItem}
+                            ellipsizeMode="tail">{parseFloat(item.price)} $</Text>
                     </View>
                     <View>
 
-                        <Text style={{ paddingLeft: 8, paddingRight: 8, padding: 4, color: 'white', fontWeight: 'bold', backgroundColor: '#3700b3', borderRadius: 10 }}>{parseInt(100 * (item.discount / item.price))}%</Text>
+                        <Text
+                            style={stylesCategoriaclList.textDiscountPricePerItem}>
+                            {parseInt(100 * (item.discount / item.price))}%
+                        </Text>
                     </View>
                 </View>
 
@@ -295,22 +311,88 @@ const CategoricalItem = ({ item, setLoadingImage, index }) => {
 }
 
 const stylesCategoriaclList = StyleSheet.create({
+    //Styles for own list
     container: {
         width: screenWidth,
         height: 370,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingTop: 30,
-        paddingBottom: 30,
+        paddingTop: theme.spacing.large,
+        paddingBottom: theme.spacing.large,
     },
+    titleItem: {
+        justifyContent: 'space-between',
+        height: '100%',
+        alignItems: 'center',
+        paddingRight: theme.spacing.small,
+        paddingLeft: theme.spacing.small,
+        imageTitle: {
+            width: 150,
+            height: 150,
+            borderRadius: theme.raduis.medium,
+        },
+        btn: {
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+    },
+    itemViewSeeMore: {
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
+        alignItems: 'center',
+        flex: 1,
+        btn: {
+            fontFamily: theme.typography.fontFamily,
+            fontSize: theme.typography.fontSize.button,
+            padding: theme.spacing.small,
+            fontWeight: 'bold',
+        }
+    },
+
+    //tyles for List items
     itemView: {
         height: '100%',
         width: 175,
         backgroundColor: 'white',
-        marginRight: 10,
-        borderRadius: 10,
-        padding: 15,
+        marginRight: theme.spacing.small,
+        borderRadius: theme.raduis.medium,
+        padding: theme.spacing.medium,
         justifyContent: 'space-between'
+    },
+    imageItem: {
+        width: 150,
+        height: 150,
+        alignSelf: 'center',
+    },
+    titleTextItem: {
+        maxWidth: '100%',
+        fontSize: theme.typography.fontSize.button,
+        fontFamily: theme.typography.fontFamily,
+        margin: theme.spacing.medium,
+    },
+    textPriceItem: {
+        maxWidth: '100%',
+        fontSize: theme.typography.fontSize.button,
+        fontFamily: theme.typography.fontFamily,
+        fontWeight: 'bold',
+    },
+    textPrimaryPriceItem: {
+        maxWidth: '100%',
+        color: 'gray',
+        fontSize: theme.typography.fontSize.button,
+        fontFamily: theme.typography.fontFamily,
+        textDecorationLine: 'line-through',
+    },
+    textDiscountPricePerItem: {
+        paddingLeft: theme.spacing.small,
+        paddingRight: theme.spacing.small,
+        padding: theme.spacing.small,
+        color: 'white',
+        fontWeight: 'bold',
+        backgroundColor: '#3700b3',
+        borderRadius: theme.raduis.medium,
     }
 })
 
@@ -319,10 +401,28 @@ export const ImageButton = (props) => {
     const dispatch = useDispatch();
 
     return (
-        <TouchableOpacity style={{ ...props.style, width: 90, height: 100, alignItems: 'center', justifyContent: 'center' }} activeOpacity={0.7} >
-            <Image source={props.src} style={{ width: 60, height: 60 }} onError={() => dispatch(setError({ networkError: true }))} />
-            <Text style={{ fontWeight: 400, fontSize: 14, padding: 5 }}>{props.title}</Text>
+        <TouchableOpacity style={{ ...props.style, ...stylesImageButton.container }} activeOpacity={0.7} >
+            <Image source={props.src} style={stylesImageButton.image} onError={() => dispatch(setError({ networkError: true }))} />
+            <Text style={stylesImageButton.text}>{props.title}</Text>
         </TouchableOpacity>
     )
 }
+
+const stylesImageButton = StyleSheet.create({
+    container: {
+        width: 90,
+        height: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    image: {
+        width: 60,
+        height: 60
+    },
+    text: {
+        fontWeight: 400,
+        fontSize: theme.typography.fontSize.small,
+        padding: theme.spacing.small,
+    }
+})
 
