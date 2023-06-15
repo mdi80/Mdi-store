@@ -410,19 +410,61 @@ export const ImageButton = (props) => {
 
 const stylesImageButton = StyleSheet.create({
     container: {
-        width: 90,
-        height: 100,
+        width: 130,
+        height: 130,
         alignItems: 'center',
         justifyContent: 'center',
     },
     image: {
-        width: 60,
-        height: 60
+        width: 80,
+        height: 80
     },
     text: {
-        fontWeight: 400,
         fontSize: theme.typography.fontSize.small,
-        padding: theme.spacing.small,
+        padding: theme.spacing.small + 3,
+        fontFamily: theme.typography.fontFamily,
+        maxWidth: 100,
+        textAlign: 'center',
     }
 })
 
+
+export const CategoryCom = (prop) => {
+    const itemsPerLine = 3;
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        fetch(prop.urlItems).then(res => res.json()).then(json => {
+            setData(json)
+        }).catch(error => {
+            console.log(error);
+            dispatch(setError({ networkError: true }))
+        })
+    }, [])
+
+
+
+    return (
+        <View style={{ ...stylesCategoryCom.container, height: 315 }}>
+            <Text style={{
+                justifyContent: 'center', alignSelf: 'center', fontSize: 1.5 * theme.typography.fontSize.header, fontWeight: 600, fontFamily: theme.typography.fontFamily
+            }}>Categories</Text>
+            {[...Array(Math.ceil(data.length / itemsPerLine))].map((_, rowIndex) => (
+                <View key={rowIndex} style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                    {data.slice(rowIndex * itemsPerLine, (rowIndex + 1) * itemsPerLine).map(item => (
+                        <ImageButton key={item.id} src={{ uri: item.image }} title={item.title} />
+                    ))}
+                </View>
+            ))}
+
+        </View>
+    )
+}
+
+const stylesCategoryCom = StyleSheet.create({
+    container: {
+        width: screenWidth,
+        justifyContent: 'space-between',
+        padding: theme.spacing.medium,
+    },
+})
