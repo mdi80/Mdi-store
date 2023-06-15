@@ -391,7 +391,7 @@ const stylesCategoriaclList = StyleSheet.create({
         padding: theme.spacing.small,
         color: 'white',
         fontWeight: 'bold',
-        backgroundColor: '#3700b3',
+        backgroundColor: theme.colors.primary,
         borderRadius: theme.raduis.medium,
     }
 })
