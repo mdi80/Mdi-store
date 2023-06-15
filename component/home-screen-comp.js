@@ -9,8 +9,11 @@ import Animated, {
     useSharedValue,
     withTiming,
     useAnimatedStyle,
+    set,
+    StretchInX,
 } from 'react-native-reanimated';
 import theme from "../theme";
+import { useDataFetching } from "../utils";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -146,7 +149,7 @@ const stylesSearchbar = StyleSheet.create({
 export const HomeScreenCategoriaclList = (props) => {
     const [loadingImage, setLoadingImage] = useState([])
     const [data, setData] = useState([])
-    const dispatch = useDispatch()
+    useDataFetching(props.urlItems, setData)
 
     // Handle Animations of component
     const comOpacity = useSharedValue(0); // Initial opacity value
@@ -178,23 +181,6 @@ export const HomeScreenCategoriaclList = (props) => {
         }
         return bool
     }
-
-
-
-    const fetchData = () => {
-
-        fetch(props.urlItems).then(res => res.json()).then(json => {
-            setData(json)
-        }).catch(error => {
-            console.log(error);
-            dispatch(setError({ networkError: true }))
-        })
-
-    }
-
-    useEffect(() => {
-        fetchData()
-    }, [])
 
 
     return (
@@ -351,7 +337,7 @@ const stylesCategoriaclList = StyleSheet.create({
         }
     },
 
-    //tyles for List items
+    //styles for List items
     itemView: {
         height: '100%',
         width: 175,
@@ -397,51 +383,10 @@ const stylesCategoriaclList = StyleSheet.create({
 })
 
 
-export const ImageButton = (props) => {
-    const dispatch = useDispatch();
-
-    return (
-        <TouchableOpacity style={{ ...props.style, ...stylesImageButton.container }} activeOpacity={0.7} >
-            <Image source={props.src} style={stylesImageButton.image} onError={() => dispatch(setError({ networkError: true }))} />
-            <Text style={stylesImageButton.text}>{props.title}</Text>
-        </TouchableOpacity>
-    )
-}
-
-const stylesImageButton = StyleSheet.create({
-    container: {
-        width: 130,
-        height: 130,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    image: {
-        width: 80,
-        height: 80
-    },
-    text: {
-        fontSize: theme.typography.fontSize.small,
-        padding: theme.spacing.small + 3,
-        fontFamily: theme.typography.fontFamily,
-        maxWidth: 100,
-        textAlign: 'center',
-    }
-})
-
-
 export const CategoryCom = (prop) => {
     const itemsPerLine = 3;
     const [data, setData] = useState([])
-
-    useEffect(() => {
-        fetch(prop.urlItems).then(res => res.json()).then(json => {
-            setData(json)
-        }).catch(error => {
-            console.log(error);
-            dispatch(setError({ networkError: true }))
-        })
-    }, [])
-
+    useDataFetching(prop.urlItems, setData)
 
 
     return (
@@ -460,6 +405,16 @@ export const CategoryCom = (prop) => {
         </View>
     )
 }
+export const ImageButton = (props) => {
+    const dispatch = useDispatch();
+
+    return (
+        <TouchableOpacity style={{ ...props.style, ...stylesCategoryCom.imageButton.container }} activeOpacity={0.7} >
+            <Image source={props.src} style={stylesCategoryCom.imageButton.image} onError={() => dispatch(setError({ networkError: true }))} />
+            <Text style={stylesCategoryCom.imageButton.text}>{props.title}</Text>
+        </TouchableOpacity>
+    )
+}
 
 const stylesCategoryCom = StyleSheet.create({
     container: {
@@ -467,4 +422,103 @@ const stylesCategoryCom = StyleSheet.create({
         justifyContent: 'space-between',
         padding: theme.spacing.medium,
     },
+    imageButton: {
+        container: {
+            width: 130,
+            height: 130,
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        image: {
+            width: 80,
+            height: 80
+        },
+        text: {
+            fontSize: theme.typography.fontSize.small,
+            padding: theme.spacing.small + 3,
+            fontFamily: theme.typography.fontFamily,
+            maxWidth: 100,
+            textAlign: 'center',
+        }
+    }
+})
+
+
+export const RecentProductView = (props) => {
+    const itemsPerLine = 3;
+    const maxHeight = 3;
+
+    const [data, setData] = useState([])
+    useDataFetching(props.url, setData);
+    return (
+        <View style={stylesRecentView.container} >
+            <Text style={stylesRecentView.titleText}>Recent Products{"\n"}
+                <Text style={stylesRecentView.subText}>Based on Recent views</Text>
+            </Text>
+
+
+
+            {[...Array((maxHeight > Math.ceil(data.length / itemsPerLine) ? Math.ceil(data.length / itemsPerLine) : maxHeight))].map((_, rowIndex) => (
+                <View key={rowIndex} style={stylesRecentView.rowContainer}>
+                    {
+                        data.slice(rowIndex * itemsPerLine, (rowIndex + 1) * itemsPerLine).map((item, pos) => (
+                            <View style={{
+                                borderBottomWidth: (rowIndex == (maxHeight - 1) ? 0 : 1),
+                                borderRightWidth: (pos == (itemsPerLine - 1) ? 0 : 1),
+                                borderColor: '#ECEFF1'
+                            }}
+
+                            >
+                                <TouchableOpacity activeOpacity={0.85}>
+
+                                    <Image
+                                        key={item.id}
+                                        source={{ uri: item.image[0].image }}
+                                        style={stylesRecentView.imageView}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        ))
+                    }
+                </View>
+            ))
+
+
+            }
+        </View >
+    )
+}
+
+
+const stylesRecentView = StyleSheet.create({
+    container: {
+        width: screenWidth,
+        height: 445,
+        paddingTop: theme.spacing.large,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    rowContainer: {
+        flexDirection: 'row',
+    },
+    imageView: {
+        margin: 10,
+        width: 100,
+        height: 100,
+    },
+    titleText: {
+        width: "100%",
+        paddingLeft: theme.spacing.large,
+        fontFamily: theme.typography.fontFamily,
+        fontSize: theme.typography.fontSize.header,
+        fontWeight: 'bold',
+        marginBottom: theme.spacing.medium,
+        lineHeight: 26,
+    },
+    subText: {
+        color: 'gray',
+        fontWeight: 300,
+        fontSize: theme.typography.fontSize.button
+    }
+
 })

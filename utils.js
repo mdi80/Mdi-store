@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
+import { useDispatch, useSelector } from 'react-redux';
+import { setError } from './reducers/appReducer';
 
 export async function saveUserSession(token) {
     try {
@@ -19,3 +22,35 @@ export async function loadUserSession() {
         return null
     }
 }
+
+
+
+export const useDataFetching = (url, setData) => {
+    const token = useSelector(state => state.auth.token)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Token ' + token
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok.');
+                }
+
+                const data = await response.json();
+                setData(data);
+            } catch (error) {
+                console.log(error.message);
+                dispatch(setError({ networkError: error.message }))
+            }
+        };
+
+        fetchData();
+    }, [url]);
+
+};
+

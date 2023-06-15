@@ -34,7 +34,6 @@ function AppContainer() {
       const token = await SecureStore.getItemAsync('token');
       if (token == null) {
         dispatch(logout())
-
       } else {
         try {
           const res = await fetch("https://mdi80nz.pythonanywhere.com/api/get-user/", {
@@ -45,7 +44,7 @@ function AppContainer() {
           })
           const json = await res.json()
           if (res.ok) {
-            dispatch(login({ username: json['username'], email: json['email'] }))
+            dispatch(login({ username: json['username'], email: json['email'], token: token }))
           } else {
             dispatch(logout())
           }

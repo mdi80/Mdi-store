@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { Image, StyleSheet, Text, View, Dimensions, Button } from "react-native";
-import { CategoryCom, HomeScreenCategoriaclList, HomeScreenSuggestList, ImageButton, SearchBarHome } from "../component/home-screen-comp";
+import { CategoryCom, HomeScreenCategoriaclList, HomeScreenSuggestList, ImageButton, RecentProductView, SearchBarHome } from "../component/home-screen-comp";
 import { ScrollView } from "react-native-gesture-handler";
 import theme from "../theme";
 const screenWidth = Dimensions.get('window').width;
@@ -18,7 +18,7 @@ export default function HomeScreen() {
     return (
         <View style={styles.container} >
             <SearchBarHome />
-            <ScrollView>
+            <ScrollView >
 
                 <Image source={require('../assets/p1.png')} style={styles.bannerImage} />
 
@@ -32,14 +32,9 @@ export default function HomeScreen() {
 
                 />
 
+                <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" />
 
-                <HomeScreenCategoriaclList
-                    hadleTitleView={<TitleViewCategoricalList />}
-                    imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
-                    urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6"
-                    backColor={theme.colors.primary}
-                />
-
+                <View style={{ height: 200 }}></View>
                 <StatusBar style="auto" />
             </ScrollView>
         </View>

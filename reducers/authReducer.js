@@ -4,6 +4,7 @@ const initialState = {
     isLogin: false,
     username: null,
     email: null,
+    token: null,
 }
 
 const authSlice = createSlice({
@@ -13,11 +14,14 @@ const authSlice = createSlice({
         login: (state, action) => {
             state.username = action.payload.username;
             state.email = action.payload.email;
+            state.token = action.payload.token;
             state.isLogin = true;
         },
         logout: (state, action) => {
-            state.user = null;
+            state.username = null;
             state.isLogin = false;
+            state.email = null;
+            state.token = null;
         }
     }
 })
