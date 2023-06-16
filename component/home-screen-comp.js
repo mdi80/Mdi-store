@@ -522,3 +522,50 @@ const stylesRecentView = StyleSheet.create({
     }
 
 })
+
+
+
+export const MostProductsView = (props) => {
+
+    const [data, setData] = useState([])
+    useDataFetching(props.uri, setData)
+
+    return (
+        <View style={stylesMostProductsView.container}>
+            <Text style={stylesMostProductsView.titleText}>{props.title}</Text>
+            <ScrollView horizontal={true} style={{ height: '100%' }} showsHorizontalScrollIndicator={false}>
+                {
+                    data.map((item, index) =>
+                        <MostProductsItem
+                            key={index}
+                            item={{ ...item, recDays: 1 }}
+                            index={index}
+                        />
+                    )
+                }
+                {data.length >= 6 &&
+                    <View style={stylesScrollableRowList.itemView}>
+                        <View style={stylesScrollableRowList.itemViewSeeMore}>
+
+                            <Icon name="arrow-alt-circle-right" size={50} color={theme.colors.primary} />
+                            <Text style={stylesScrollableRowList.itemViewSeeMore.btn}>See All</Text>
+                        </View>
+                    </View>
+                }
+            </ScrollView>
+
+        </View >
+    )
+}
+
+const MostProductsItem = (props) => {
+
+    return (
+        <View style={stylesMostProductsView.item}>
+            <Image source={{ uri: props.item.image[0].image }} style={stylesMostProductsView.item.image} />
+            <Text style={stylesMostProductsView.item.text}>{props.item.title}</Text>
+
+        </View >
+
+    )
+}
