@@ -63,13 +63,19 @@ export default function HomeScreen() {
         extrapolate: 'clamp',
     });
 
+    const animatedScrollHight = scrollY.interpolate({
+        inputRange: inputRange, // Adjust these values as per your requirements
+        outputRange: [400, 0], // Adjust these values as per your requirements
+        extrapolate: 'clamp',
+    });
+
     return (
         <View style={styles.container} >
             <SearchBarHome />
             {/* <HeaderComponent animated={animatedStyle} setPosY={setPosY} /> */}
 
 
-            <Animated.View style={{ height: animatedHeightContainer, backgroundColor: 'rgba(0,0,0,0)', position: 'relative' }}>
+            <Animated.View style={{ height: animatedHeightContainer, zIndex: 2, position: 'absolute', top: 100 }}>
                 <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth, overflow: 'hidden', height: animatedHeight, borderRadius: animatCor }}>
 
                     <Image source={require("../assets/h1.webp")} style={{ ...stylesHeaderComp.image, zIndex: 0, width: '100%', height: "100%" }} />
@@ -84,9 +90,11 @@ export default function HomeScreen() {
                     <Image source={require("../assets/h4.webp")} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
                 </Animated.View>
             </Animated.View >
-            <ScrollView onScroll={handleScroll} scrollEventThrottle={16} >
+            <ScrollView onScroll={handleScroll} scrollEventThrottle={16} contentContainerStyle={{ paddingTop: 300 }} >
 
+                {/* <Animated.View style={{ height: animatedScrollHight }}>
 
+                </Animated.View> */}
                 {/* <Image source={require('../assets/p1.png')} style={styles.bannerImage} /> */}
                 <CategoryCom urlItems="https://mdi80nz.pythonanywhere.com/api/get-categories/" />
 

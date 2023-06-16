@@ -5865,6 +5865,11 @@ react-native-gradle-plugin@^0.71.18:
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.18.tgz#20ef199bc85be32e45bb6cc069ec2e7dcb1a74a6"
   integrity sha512-7F6bD7B8Xsn3JllxcwHhFcsl9aHIig47+3eN4IHFNqfLhZr++3ElDrcqfMzugM+niWbaMi7bJ0kAkAL8eCpdWg==
 
+react-native-linear-gradient@^2.7.2:
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.7.2.tgz#c92094c8070ccb5847cc5a28d7f6bf7bd3514fdd"
+  integrity sha512-c1mNtmQrD+nzlIePQ5XZR/6IuEaNcYvE+N7MnOHDSOkXmxfLVbyicT15KEYnXQqbTLwTrFNJPZot241lWRVC3g==
+
 react-native-reanimated@~2.14.4:
   version "2.14.4"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.14.4.tgz#3fa3da4e7b99f5dfb28f86bcf24d9d1024d38836"
