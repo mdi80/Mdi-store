@@ -544,11 +544,11 @@ export const MostProductsView = (props) => {
                     )
                 }
                 {data.length >= 6 &&
-                    <View style={stylesScrollableRowList.itemView}>
-                        <View style={stylesScrollableRowList.itemViewSeeMore}>
+                    <View style={{}}>
+                        <View style={{}}>
 
                             <Icon name="arrow-alt-circle-right" size={50} color={theme.colors.primary} />
-                            <Text style={stylesScrollableRowList.itemViewSeeMore.btn}>See All</Text>
+                            <Text style={{}}>See All</Text>
                         </View>
                     </View>
                 }

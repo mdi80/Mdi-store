@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { Image, StyleSheet, Text, View, Dimensions, Button } from "react-native";
-import { CategoryCom, HomeScreenCategoriaclList, HomeScreenSuggestList, ImageButton, RecentProductView, SearchBarHome } from "../component/home-screen-comp";
+import { CategoryCom, HomeScreenCategoriaclList, HomeScreenSuggestList, ImageButton, MostProductsView, RecentProductView, SearchBarHome } from "../component/home-screen-comp";
 import { ScrollView } from "react-native-gesture-handler";
 import theme from "../theme";
 const screenWidth = Dimensions.get('window').width;
@@ -33,6 +33,8 @@ export default function HomeScreen() {
                 />
 
                 <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" />
+
+                <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Most Views" />
 
                 <View style={{ height: 200 }}></View>
                 <StatusBar style="auto" />
