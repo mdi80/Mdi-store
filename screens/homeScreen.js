@@ -1,10 +1,9 @@
 import { StatusBar } from "expo-status-bar";
-import { Image, StyleSheet, Text, View, Dimensions, Button } from "react-native";
-import { CategoryCom, GridProductView, ScrollableRowList, HomeScreenSuggestList, ImageButton, MostProductsView, SearchBarHome, HeaderComponent } from "../component/home-screen-comp";
+import { Image, StyleSheet, Text, View, Dimensions, Button, Animated } from "react-native";
+import { CategoryCom, GridProductView, ScrollableRowList, HomeScreenSuggestList, ImageButton, MostProductsView, SearchBarHome, HeaderComponent, stylesHeaderComp } from "../component/home-screen-comp";
 import { ScrollView } from "react-native-gesture-handler";
 import theme from "../theme";
-import { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
-import { useState } from "react";
+import { useRef, useState } from "react";
 const screenWidth = Dimensions.get('window').width;
 
 
@@ -17,34 +16,78 @@ const TitleViewScrollableList = () => (
 
 
 export default function HomeScreen() {
-    const [posY, setPosY] = useState(0)
-    const width = useSharedValue(screenWidth / 2 - 10)
-    const height = useSharedValue((screenWidth / 2 - 10) * 3 / 4)
-    const onscroll = (event) => {
-        // console.log(event.nativeEvent.contentOffset.y)
-        // Access and use the properties as needed
-        // width.value = (103 - event.nativeEvent.contentOffset.y) / 89
-        setPosY(event.nativeEvent.contentOffset.y)
-        width.value = width.value / (1 + (posY > 89 ? 89 : posY) / 89)
-        height.value = height.value / (1 + (posY > 89 ? 89 : posY) / 89)
-    }
-    const animatedStyle = useAnimatedStyle(() => {
-        return {
-            // transform: [{ posY1: posY1.value }],
-            width: width.value,
-            height: height.value,
-        };
+    const scrollY = useRef(new Animated.Value(0)).current;
+
+    const handleScroll = e => {
+        console.log(e.nativeEvent.contentOffset.y);
+        scrollY.setValue(e.nativeEvent.contentOffset.y)
+    };
+
+    const inputRange = [0, 250]
+    const animatedHeight = scrollY.interpolate({
+        inputRange: inputRange, // Adjust these values as per your requirements
+        outputRange: [(screenWidth / 2 - 10) * 3 / 4, (screenWidth / 2 - 10) * 3 / 10], // Adjust these values as per your requirements
+        extrapolate: 'clamp',
     });
 
+    const animatedWidth = scrollY.interpolate({
+        inputRange: inputRange, // Adjust these values as per your requirements
+        outputRange: [(screenWidth / 2 - 10), (screenWidth / 2 - 10) / 2.5], // Adjust these values as per your requirements
+        extrapolate: 'clamp',
+    });
+
+    const animatedposY2 = scrollY.interpolate({
+        inputRange: inputRange, // Adjust these values as per your requirements
+        outputRange: [(screenWidth / 2 - 10) + 5, 3 * (screenWidth / 2 - 10) / 2 + 2.5], // Adjust these values as per your requirements
+        extrapolate: 'clamp',
+    });
+    const animatedposX3 = scrollY.interpolate({
+        inputRange: inputRange, // Adjust these values as per your requirements
+        outputRange: [0, (screenWidth / 2 - 10) / 2 + 2.5], // Adjust these values as per your requirements
+        extrapolate: 'clamp',
+    });
+    const animatedposY3 = scrollY.interpolate({
+        inputRange: inputRange, // Adjust these values as per your requirements
+        outputRange: [(3 * (screenWidth / 2 - 10) / 4) + 5, 0], // Adjust these values as per your requirements
+        extrapolate: 'clamp',
+    });
+    const animatedHeightContainer = scrollY.interpolate({
+        inputRange: inputRange, // Adjust these values as per your requirements
+        outputRange: [(screenWidth / 2 - 10) * 3 / 2 + 10, (screenWidth / 2 - 10) * 3 / 8 + 5], // Adjust these values as per your requirements
+        extrapolate: 'clamp',
+    });
+
+    const animatCor = scrollY.interpolate({
+        inputRange: inputRange, // Adjust these values as per your requirements
+        outputRange: [theme.raduis.large, theme.raduis.large * 2], // Adjust these values as per your requirements
+        extrapolate: 'clamp',
+    });
 
     return (
         <View style={styles.container} >
             <SearchBarHome />
-            <HeaderComponent animated={animatedStyle} setPosY={setPosY} />
-            <ScrollView onScroll={onscroll}>
+            {/* <HeaderComponent animated={animatedStyle} setPosY={setPosY} /> */}
+
+
+            <Animated.View style={{ height: animatedHeightContainer, backgroundColor: 'rgba(0,0,0,0)', position: 'relative' }}>
+                <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth, overflow: 'hidden', height: animatedHeight, borderRadius: animatCor }}>
+
+                    <Image source={require("../assets/h1.webp")} style={{ ...stylesHeaderComp.image, zIndex: 0, width: '100%', height: "100%" }} />
+                </Animated.View>
+                <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth, overflow: 'hidden', height: animatedHeight, left: animatedposY2, borderRadius: animatCor }}>
+                    <Image source={require("../assets/h2.webp")} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
+                </Animated.View>
+                <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth, overflow: 'hidden', top: animatedposY3, height: animatedHeight, left: animatedposX3, borderRadius: animatCor }}>
+                    <Image source={require("../assets/h3.webp")} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
+                </Animated.View>
+                <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth, overflow: 'hidden', left: (screenWidth / 2 - 10) + 5, height: animatedHeight, top: animatedposY3, borderRadius: animatCor }}>
+                    <Image source={require("../assets/h4.webp")} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
+                </Animated.View>
+            </Animated.View >
+            <ScrollView onScroll={handleScroll} scrollEventThrottle={16} >
+
 
                 {/* <Image source={require('../assets/p1.png')} style={styles.bannerImage} /> */}
-                <View style={{ height: 300 }}></View>
                 <CategoryCom urlItems="https://mdi80nz.pythonanywhere.com/api/get-categories/" />
 
                 <ScrollableRowList
@@ -61,7 +104,7 @@ export default function HomeScreen() {
                 <View style={{ height: 200 }}></View>
                 <StatusBar style="auto" />
             </ScrollView>
-        </View>
+        </View >
     )
 }
 

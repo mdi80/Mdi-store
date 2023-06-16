@@ -184,18 +184,19 @@ export const HeaderComponent = (props) => {
     )
 }
 
-const stylesHeaderComp = StyleSheet.create({
+export const stylesHeaderComp = StyleSheet.create({
     rowContainer: {
         flexDirection: 'row',
         // justifyContent: 'center',
         // alignItems: 'center',
     },
-    image1: {
-
-        borderRadius: theme.raduis.large,
+    animateImage: {
+        margin: 3,
         position: 'absolute',
-        left: 10,
-        top: 10,
+        borderRadius: theme.raduis.large,
+
+    },
+    image: {
     },
     image2: {
         width: screenWidth / 2 - 10,
