@@ -569,3 +569,41 @@ const MostProductsItem = (props) => {
 
     )
 }
+const stylesMostProductsView = StyleSheet.create({
+
+    container: {
+        width: screenWidth,
+        paddingTop: theme.spacing.large,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    titleText: {
+        width: "100%",
+        paddingLeft: theme.spacing.large,
+        fontFamily: theme.typography.fontFamily,
+        fontSize: theme.typography.fontSize.header,
+        fontWeight: 'bold',
+        marginBottom: theme.spacing.medium,
+        lineHeight: 26,
+    },
+    item: {
+        height: 300,
+        width: 180,
+        borderRightWidth: 1,
+        borderColor: '#ECEFF1',
+        image: {
+            marginTop: 20,
+            width: 150,
+            height: 150,
+            alignSelf: 'center',
+        },
+        text: {
+            fontSize: theme.typography.fontSize.button + 2,
+            fontFamily: theme.typography.fontFamily,
+            marginLeft: 15,
+        },
+    },
+})
+
+
+
