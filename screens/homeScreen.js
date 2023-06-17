@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { Image, StyleSheet, Text, View, Dimensions, Button } from "react-native";
-import { CategoryCom, HomeScreenCategoriaclList, HomeScreenSuggestList, ImageButton, MostProductsView, RecentProductView, SearchBarHome } from "../component/home-screen-comp";
-import { ScrollView } from "react-native-gesture-handler";
+import { CategoryCom, HomeScreenCategoriaclList, HomeScreenSuggestList, ImageButton, MostProductsView, RecentProductView, SearchBarHome, componentsHeight } from "../component/home-screen-comp";
+import { FlatList, ScrollView } from "react-native-gesture-handler";
 import theme from "../theme";
 const screenWidth = Dimensions.get('window').width;
 
@@ -16,43 +16,55 @@ const TitleViewCategoricalList = () => (
 
 export default function HomeScreen() {
     const homeScreenComponents = [
-        () => <Image source={require('../assets/p1.png')} style={styles.bannerImage} />,
+        { Comp: () => <Image source={require('../assets/p1.png')} style={styles.bannerImage} />, height: styles.bannerImage.height, key: 1 },
 
-        () => <CategoryCom urlItems="https://mdi80nz.pythonanywhere.com/api/get-categories/" />,
+        { Comp: () => <CategoryCom urlItems="https://mdi80nz.pythonanywhere.com/api/get-categories/" />, height: componentsHeight.CategoryCom, key: 2 },
+        {
+            Comp: () => <HomeScreenCategoriaclList
+                hadleTitleView={<TitleViewCategoricalList />}
+                imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
+                urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6"
+                backColor={theme.colors.primary}
 
-        () => <HomeScreenCategoriaclList
-            hadleTitleView={<TitleViewCategoricalList />}
-            imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
-            urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6"
-            backColor={theme.colors.primary}
+            />, height: componentsHeight.HomeScreenCategoriaclList, key: 3
+        },
 
-        />,
+        { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Recent Products" subtitle="Based on Recent views" />, height: componentsHeight.RecentProductView, key: 4 },
 
-        () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Recent Products" subtitle="Based on Recent views" />,
+        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Most Viewed" />, height: componentsHeight.MostProductsView, key: 5 },
 
-        () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Most Viewed" />,
+        {
+            Comp: () => <HomeScreenCategoriaclList
+                hadleTitleView={<TitleViewCategoricalList />}
+                imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
+                urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6"
+                backColor={theme.colors.secondary}
 
-        () => <HomeScreenCategoriaclList
-            hadleTitleView={<TitleViewCategoricalList />}
-            imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
-            urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6"
-            backColor={theme.colors.secondary}
-
-        />,
-        () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Digital Product" subtitle="Suggested Category" />,
-        () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Top Sale" />,
-        () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Mobile" subtitle="Suggested Category" />,
+            />, height: componentsHeight.HomeScreenCategoriaclList, key: 6
+        },
+        { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Digital Product" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 7 },
+        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Top Sale" />, height: componentsHeight.MostProductsView, key: 8 },
+        { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Mobile" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 9 },
     ]
+
+
+    const renderComp = ({ item }) => {
+        return (
+            <View style={{ height: item.height }}>
+                {/* {console.log(item.height)} */}
+                <item.Comp />
+            </View>
+        )
+    }
     return (
         <View style={styles.container} >
             <SearchBarHome />
-            <ScrollView >
+            <FlatList data={homeScreenComponents} renderItem={renderComp} keyExtractor={(item) => item.key} />
 
-                {homeScreenComponents.map((Comp, index) => <Comp key={index} />)}
+            {/* {homeScreenComponents.map((Comp, index) => <Comp key={index} />)} */}
 
-                <View style={{ height: 200 }}></View>
-                <StatusBar style="auto" />
-            </ScrollView>
+            {/* <View style={{ height: 200 }}></View> */}
+            <StatusBar style="auto" />
         </View>
     )
 }

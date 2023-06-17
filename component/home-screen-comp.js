@@ -506,7 +506,7 @@ const stylesRecentView = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    
+
     rowContainer: {
         flexDirection: 'row',
     },
@@ -633,3 +633,6 @@ const stylesMostProductsView = StyleSheet.create({
     },
 })
 
+
+
+export const componentsHeight = { CategoryCom: stylesCategoryCom.container.height, HomeScreenCategoriaclList: stylesCategoriaclList.container.height, RecentProductView: stylesRecentView.container.height, MostProductsView: stylesMostProductsView.container.height }
