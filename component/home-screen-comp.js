@@ -270,31 +270,38 @@ const CategoricalItem = ({ item, setLoadingImage, index }) => {
 
             <View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-
-                    <View>
-                        <Text
-                            style={stylesCategoriaclList.textPriceItem}
-                            ellipsizeMode="tail">
-                            {parseFloat(item.price - item.discount) + " $"}
-                        </Text>
-                        <Text
-                            style={stylesCategoriaclList.textPrimaryPriceItem}
-                            ellipsizeMode="tail">{parseFloat(item.price)} $</Text>
-                    </View>
-                    <View>
-
-                        <Text
-                            style={stylesCategoriaclList.textDiscountPricePerItem}>
-                            {parseInt(100 * (item.discount / item.price))}%
-                        </Text>
-                    </View>
-                </View>
-
+                <ShowPrice price={item.price} discount={item.discount} />
             </View>
         </TouchableOpacity>
     )
 }
+
+
+const ShowPrice = ({ price, discount }) => (
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
+
+        <View>
+            <Text
+                style={stylesCategoriaclList.textPriceItem}
+                ellipsizeMode="tail">
+                {parseFloat(price - discount) + " $"}
+            </Text>
+            {discount != 0 &&
+                <Text
+                    style={stylesCategoriaclList.textPrimaryPriceItem}
+                    ellipsizeMode="tail">{parseFloat(price)} $</Text>
+            }
+        </View>
+        <View>
+            {discount != 0 &&
+                <Text
+                    style={stylesCategoriaclList.textDiscountPricePerItem}>
+                    {(parseInt(100 * (discount / price)) == 0 ? 1 : parseInt(100 * (discount / price)))}%
+                </Text>
+            }
+        </View>
+    </View>
+)
 
 const stylesCategoriaclList = StyleSheet.create({
     //Styles for own list
@@ -374,7 +381,7 @@ const stylesCategoriaclList = StyleSheet.create({
     textDiscountPricePerItem: {
         paddingLeft: theme.spacing.small,
         paddingRight: theme.spacing.small,
-        padding: theme.spacing.small,
+        padding: 3,
         color: 'white',
         fontWeight: 'bold',
         backgroundColor: theme.colors.primary,
@@ -526,7 +533,7 @@ const stylesRecentView = StyleSheet.create({
 
 
 export const MostProductsView = (props) => {
-
+    const numberOfShow = 6
     const [data, setData] = useState([])
     useDataFetching(props.uri, setData)
 
@@ -535,7 +542,7 @@ export const MostProductsView = (props) => {
             <Text style={stylesMostProductsView.titleText}>{props.title}</Text>
             <ScrollView horizontal={true} style={{ height: '100%' }} showsHorizontalScrollIndicator={false}>
                 {
-                    data.map((item, index) =>
+                    data.slice(0, (numberOfShow <= data.length ? numberOfShow : data.length)).map((item, index) =>
                         <MostProductsItem
                             key={index}
                             item={{ ...item, recDays: 1 }}
@@ -543,14 +550,14 @@ export const MostProductsView = (props) => {
                         />
                     )
                 }
-                {data.length >= 6 &&
-                    <View style={{}}>
-                        <View style={{}}>
+                {data.length >= numberOfShow &&
+                    <TouchableOpacity style={{ ...stylesMostProductsView.item, justifyContent: 'center' }} activeOpacity={0.88}>
+                        <View style={{ alignSelf: 'center' }}>
 
                             <Icon name="arrow-alt-circle-right" size={50} color={theme.colors.primary} />
                             <Text style={{}}>See All</Text>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                 }
             </ScrollView>
 
@@ -561,11 +568,24 @@ export const MostProductsView = (props) => {
 const MostProductsItem = (props) => {
 
     return (
-        <View style={stylesMostProductsView.item}>
+        <TouchableOpacity style={stylesMostProductsView.item} activeOpacity={0.88}>
             <Image source={{ uri: props.item.image[0].image }} style={stylesMostProductsView.item.image} />
-            <Text style={stylesMostProductsView.item.text}>{props.item.title}</Text>
+            <Text style={stylesMostProductsView.item.text} numberOfLines={2}>{props.item.title}</Text>
+            <View style={{ flexDirection: 'row' }}>
+                <Icon name="rocket" size={15} color={theme.colors.primary} />
+                {props.item.recDays == 1 ?
+                    <Text style={{ color: 'gray', marginLeft: 10 }}>
+                        Send tomorrow
+                    </Text>
 
-        </View >
+                    :
+                    <Text style={{ color: 'gray', marginLeft: 10 }}>
+                        Send in {props.item.recDays} days
+                    </Text>
+                }
+            </View>
+            <ShowPrice price={props.item.price} discount={props.item.discount} />
+        </TouchableOpacity >
 
     )
 }
@@ -587,20 +607,25 @@ const stylesMostProductsView = StyleSheet.create({
         lineHeight: 26,
     },
     item: {
-        height: 300,
+        height: 330,
         width: 180,
         borderRightWidth: 1,
         borderColor: '#ECEFF1',
+        padding: theme.spacing.large,
+        justifyContent: 'space-between',
         image: {
-            marginTop: 20,
+            // marginTop: 20,
             width: 150,
             height: 150,
+            marginBottom: 2,
             alignSelf: 'center',
         },
         text: {
-            fontSize: theme.typography.fontSize.button + 2,
+            fontSize: theme.typography.fontSize.button,
             fontFamily: theme.typography.fontFamily,
-            marginLeft: 15,
+            // marginLeft: 15,
+            lineHeight: 20,
+            height: 40,
         },
     },
 })
