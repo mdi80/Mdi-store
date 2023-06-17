@@ -397,7 +397,7 @@ export const CategoryCom = (prop) => {
 
 
     return (
-        <View style={{ ...stylesCategoryCom.container, height: 315 }}>
+        <View style={{ ...stylesCategoryCom.container }}>
             <Text style={{
                 justifyContent: 'center', alignSelf: 'center', fontSize: 1.5 * theme.typography.fontSize.header, fontWeight: 600, fontFamily: theme.typography.fontFamily
             }}>Categories</Text>
@@ -426,6 +426,7 @@ export const ImageButton = (props) => {
 const stylesCategoryCom = StyleSheet.create({
     container: {
         width: screenWidth,
+        height: 315,
         justifyContent: 'space-between',
         padding: theme.spacing.medium,
     },
@@ -459,8 +460,8 @@ export const RecentProductView = (props) => {
     useDataFetching(props.url, setData);
     return (
         <View style={stylesRecentView.container} >
-            <Text style={stylesRecentView.titleText}>Recent Products{"\n"}
-                <Text style={stylesRecentView.subText}>Based on Recent views</Text>
+            <Text style={stylesRecentView.titleText}>{props.title}{"\n"}
+                <Text style={stylesRecentView.subText}>{props.subtitle}</Text>
             </Text>
 
 
@@ -474,7 +475,7 @@ export const RecentProductView = (props) => {
                                 borderRightWidth: (pos == (itemsPerLine - 1) ? 0 : 1),
                                 borderColor: '#ECEFF1'
                             }}
-
+                                key={pos}
                             >
                                 <TouchableOpacity activeOpacity={0.85}>
 
@@ -505,6 +506,7 @@ const stylesRecentView = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    
     rowContainer: {
         flexDirection: 'row',
     },
@@ -593,6 +595,7 @@ const stylesMostProductsView = StyleSheet.create({
 
     container: {
         width: screenWidth,
+        height: 400,
         paddingTop: theme.spacing.large,
         justifyContent: 'center',
         alignItems: 'center'
@@ -629,6 +632,4 @@ const stylesMostProductsView = StyleSheet.create({
         },
     },
 })
-
-
 

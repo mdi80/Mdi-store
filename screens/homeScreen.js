@@ -13,28 +13,42 @@ const TitleViewCategoricalList = () => (
     </View>
 )
 
-export default function HomeScreen() {
 
+export default function HomeScreen() {
+    const homeScreenComponents = [
+        () => <Image source={require('../assets/p1.png')} style={styles.bannerImage} />,
+
+        () => <CategoryCom urlItems="https://mdi80nz.pythonanywhere.com/api/get-categories/" />,
+
+        () => <HomeScreenCategoriaclList
+            hadleTitleView={<TitleViewCategoricalList />}
+            imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
+            urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6"
+            backColor={theme.colors.primary}
+
+        />,
+
+        () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Recent Products" subtitle="Based on Recent views" />,
+
+        () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Most Viewed" />,
+
+        () => <HomeScreenCategoriaclList
+            hadleTitleView={<TitleViewCategoricalList />}
+            imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
+            urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6"
+            backColor={theme.colors.secondary}
+
+        />,
+        () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Digital Product" subtitle="Suggested Category" />,
+        () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Top Sale" />,
+        () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Mobile" subtitle="Suggested Category" />,
+    ]
     return (
         <View style={styles.container} >
             <SearchBarHome />
             <ScrollView >
 
-                <Image source={require('../assets/p1.png')} style={styles.bannerImage} />
-
-                <CategoryCom urlItems="https://mdi80nz.pythonanywhere.com/api/get-categories/" />
-
-                <HomeScreenCategoriaclList
-                    hadleTitleView={<TitleViewCategoricalList />}
-                    imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
-                    urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6"
-                    backColor={theme.colors.primary}
-
-                />
-
-                <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" />
-
-                <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Most Views" />
+                {homeScreenComponents.map((Comp, index) => <Comp key={index} />)}
 
                 <View style={{ height: 200 }}></View>
                 <StatusBar style="auto" />
