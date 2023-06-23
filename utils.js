@@ -30,6 +30,7 @@ export const useDataFetching = (url, setData) => {
     const dispatch = useDispatch()
     useEffect(() => {
         const fetchData = async () => {
+            console.log("fetchin " + url);
             try {
                 const response = await fetch(url, {
                     method: 'GET',

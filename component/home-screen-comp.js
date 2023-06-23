@@ -459,7 +459,9 @@ export const RecentProductView = (props) => {
     const [data, setData] = useState([])
     useDataFetching(props.url, setData);
     return (
+
         <View style={stylesRecentView.container} >
+            {console.log(props.data)}
             <Text style={stylesRecentView.titleText}>{props.title}{"\n"}
                 <Text style={stylesRecentView.subText}>{props.subtitle}</Text>
             </Text>

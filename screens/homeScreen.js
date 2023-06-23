@@ -1,8 +1,10 @@
 import { StatusBar } from "expo-status-bar";
-import { Image, StyleSheet, Text, View, Dimensions, Button } from "react-native";
+import { Image, StyleSheet, Text, View, Dimensions, Button, VirtualizedList } from "react-native";
 import { CategoryCom, HomeScreenCategoriaclList, HomeScreenSuggestList, ImageButton, MostProductsView, RecentProductView, SearchBarHome, componentsHeight } from "../component/home-screen-comp";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import theme from "../theme";
+import { useEffect, useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 const screenWidth = Dimensions.get('window').width;
 
 
@@ -23,49 +25,65 @@ export default function HomeScreen() {
             Comp: () => <HomeScreenCategoriaclList
                 hadleTitleView={<TitleViewCategoricalList />}
                 imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
-                urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6"
+                urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=1"
                 backColor={theme.colors.primary}
 
             />, height: componentsHeight.HomeScreenCategoriaclList, key: 3
         },
 
-        { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Recent Products" subtitle="Based on Recent views" />, height: componentsHeight.RecentProductView, key: 4 },
+        { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=2" title="Recent Products" subtitle="Based on Recent views" />, height: componentsHeight.RecentProductView, key: 4 },
 
-        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Most Viewed" />, height: componentsHeight.MostProductsView, key: 5 },
+        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=3" title="Most Viewed" />, height: componentsHeight.MostProductsView, key: 5 },
 
         {
             Comp: () => <HomeScreenCategoriaclList
                 hadleTitleView={<TitleViewCategoricalList />}
                 imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
-                urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6"
+                urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4"
                 backColor={theme.colors.secondary}
 
             />, height: componentsHeight.HomeScreenCategoriaclList, key: 6
         },
-        { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Digital Product" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 7 },
-        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Top Sale" />, height: componentsHeight.MostProductsView, key: 8 },
+        { Comp: ({ data }) => <RecentProductView data={data} url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4" title="Digital Product" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 7 },
+        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=5" title="Top Sale" />, height: componentsHeight.MostProductsView, key: 8 },
         { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Mobile" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 9 },
+        { Comp: ({ data }) => <RecentProductView data={data} url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4" title="Digital Product" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 7 },
+        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=5" title="Top Sale" />, height: componentsHeight.MostProductsView, key: 8 },
+        { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Mobile" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 9 },
+        { Comp: ({ data }) => <RecentProductView data={data} url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4" title="Digital Product" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 7 },
+        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=5" title="Top Sale" />, height: componentsHeight.MostProductsView, key: 8 },
+        { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Mobile" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 9 },
+
     ]
 
 
-    const renderComp = ({ item }) => {
+    const RenderParent = ({ item }) => {
+        const [data, setdata] = useState("")
+
+        useEffect(() => {
+            setdata("here")
+        })
         return (
             <View style={{ height: item.height }}>
                 {/* {console.log(item.height)} */}
-                <item.Comp />
+                <item.Comp data={data} />
             </View>
         )
     }
+
+    const renderComp = ({ item }) => {
+
+    }
     return (
-        <View style={styles.container} >
+        <SafeAreaView style={styles.container} >
             <SearchBarHome />
-            <FlatList data={homeScreenComponents} renderItem={renderComp} keyExtractor={(item) => item.key} />
+            <VirtualizedList initialNumToRender={4} getItemCount={() => homeScreenComponents.length} getItem={(data, index) => homeScreenComponents[index]} data={homeScreenComponents} renderItem={({ item }) => <RenderParent item={item} />} keyExtractor={(item) => item.key} />
 
             {/* {homeScreenComponents.map((Comp, index) => <Comp key={index} />)} */}
 
             {/* <View style={{ height: 200 }}></View> */}
             <StatusBar style="auto" />
-        </View>
+        </SafeAreaView>
     )
 }
 

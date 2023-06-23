@@ -23,7 +23,7 @@ const Stack = createStackNavigator()
 function AppContainer() {
 
   const isLoggedin = true//TODO must be : useSelector(state => state.auth.isLogin)
-  const [isLoading, setIsLoading] = useState(false)//TODO must be false
+  const [isLoading, setIsLoading] = useState(true)//TODO must be false
 
   dispatch = useDispatch()
   error = useSelector(state => state.app.networkError)
@@ -63,6 +63,7 @@ function AppContainer() {
 
   return (
     <NavigationContainer >
+      {console.log(useSelector(state => state.auth.token))}
       {isLoading ?
         <View style={styles.container}>
           <Image
