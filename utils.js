@@ -8,7 +8,6 @@ export async function saveUserSession(token) {
     try {
         await SecureStore.setItemAsync('token', token);
         const token3 = await SecureStore.getItemAsync('token');
-        console.log(token3);
     } catch (error) {
         console.log('Error saving user session:', error);
     }
@@ -31,7 +30,6 @@ export const useDataFetching = (url, setData) => {
     const dispatch = useDispatch()
     useEffect(() => {
         const fetchData = async () => {
-            console.log("fetchin " + url);
             try {
                 const response = await fetch(url, {
                     method: 'GET',

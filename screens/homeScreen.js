@@ -59,7 +59,6 @@ export default function HomeScreen() {
         })
         return (
             <View style={{ height: item.height }}>
-                {/* {console.log(item.height)} */}
                 <item.Comp data={data} />
             </View>
         )

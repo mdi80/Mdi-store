@@ -424,7 +424,6 @@ export const RecentProductView = (props) => {
     return (
 
         <Animated.View style={[stylesRecentView.container, animatedStyle]} >
-            {console.log(props.data)}
             <Text style={stylesRecentView.titleText}>{props.title}{"\n"}
                 <Text style={stylesRecentView.subText}>{props.subtitle}</Text>
             </Text>
