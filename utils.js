@@ -57,7 +57,7 @@ export const useDataFetching = (url, setData) => {
 };
 
 
-
+// Animation utilitis for home screen animation
 export const useLoadingAnim = () => {
     const [loadingItems, setLoadingItems] = useState([])
 
@@ -95,3 +95,18 @@ export const useLoadingAnim = () => {
 
     return [setLoadingItems, animatedStyle]
 }
+export const handleLoadStart = (index, setLoadingImage) => {
+    setLoadingImage(prevState => {
+        let newState = [...prevState];
+        newState[index] = false;
+        return newState;
+    });
+};
+
+export const handleLoad = (index, setLoadingImage) => {
+    setLoadingImage(prevState => {
+        let newState = [...prevState];
+        newState[index] = true;
+        return newState;
+    });
+};

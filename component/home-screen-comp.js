@@ -13,7 +13,7 @@ import Animated, {
     StretchInX,
 } from 'react-native-reanimated';
 import theme from "../theme";
-import { useDataFetching, useLoadingAnim } from "../utils";
+import { handleLoad, handleLoadStart, useDataFetching, useLoadingAnim } from "../utils";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -147,21 +147,7 @@ const stylesSearchbar = StyleSheet.create({
 
 
 
-const handleLoadStart = (index, setLoadingImage) => {
-    setLoadingImage(prevState => {
-        let newState = [...prevState];
-        newState[index] = false;
-        return newState;
-    });
-};
 
-const handleLoad = (index, setLoadingImage) => {
-    setLoadingImage(prevState => {
-        let newState = [...prevState];
-        newState[index] = true;
-        return newState;
-    });
-};
 ////Start of first component
 export const HomeScreenCategoriaclList = (props) => {
     // const [loadingImage, setLoadingImage] = useState([])
@@ -428,7 +414,6 @@ const stylesCategoryCom = StyleSheet.create({
     }
 })
 
-
 export const RecentProductView = (props) => {
     const itemsPerLine = 3;
     const maxHeight = 3;
@@ -480,7 +465,6 @@ export const RecentProductView = (props) => {
     )
 }
 
-
 const stylesRecentView = StyleSheet.create({
     container: {
         width: screenWidth,
@@ -514,8 +498,6 @@ const stylesRecentView = StyleSheet.create({
     }
 
 })
-
-
 
 export const MostProductsView = (props) => {
     const numberOfShow = 6
@@ -579,6 +561,7 @@ const MostProductsItem = (props) => {
 
     )
 }
+
 const stylesMostProductsView = StyleSheet.create({
 
     container: {
