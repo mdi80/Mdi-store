@@ -50,6 +50,7 @@ export default function HomeScreen() {
     ]
 
 
+
     const RenderParent = ({ item }) => {
         const [data, setdata] = useState("")
 
@@ -64,19 +65,16 @@ export default function HomeScreen() {
         )
     }
 
-    const renderComp = ({ item }) => {
-
+    const getComp = (data, index) => {
+        return data[index]
     }
     return (
-        <SafeAreaView style={styles.container} >
+        <View style={styles.container} >
             <SearchBarHome />
-            <VirtualizedList initialNumToRender={4} getItemCount={() => homeScreenComponents.length} getItem={(data, index) => homeScreenComponents[index]} data={homeScreenComponents} renderItem={({ item }) => <RenderParent item={item} />} keyExtractor={(item) => item.key} />
+            <VirtualizedList getItemCount={() => homeScreenComponents.length} getItem={getComp} data={homeScreenComponents} renderItem={({ item }) => <RenderParent item={item} />} keyExtractor={(item) => item.key} />
 
-            {/* {homeScreenComponents.map((Comp, index) => <Comp key={index} />)} */}
-
-            {/* <View style={{ height: 200 }}></View> */}
             <StatusBar style="auto" />
-        </SafeAreaView>
+        </View>
     )
 }
 

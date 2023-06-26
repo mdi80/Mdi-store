@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { useDispatch, useSelector } from 'react-redux';
 import { setError } from './reducers/appReducer';
+import { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 export async function saveUserSession(token) {
     try {
@@ -55,3 +56,42 @@ export const useDataFetching = (url, setData) => {
 
 };
 
+
+
+export const useLoadingAnim = () => {
+    const [loadingItems, setLoadingItems] = useState([])
+
+
+    const comOpacity = useSharedValue(0); // Initial opacity value
+    const animateComponent = () => {
+        comOpacity.value = withTiming(1, { duration: 400 }); // Fade-in animation with a duration of 1000ms
+    };
+
+    const animatedStyle = useAnimatedStyle(() => {
+        return {
+            opacity: comOpacity.value, // Apply the animated opacity value to the component
+        };
+    });
+
+
+    useEffect(() => {
+        allImageLoaded()
+    }, [loadingItems])
+
+
+    const allImageLoaded = () => {
+        let bool = true;
+        if (loadingItems.length == 0) return false;
+        loadingItems.forEach(i => {
+            if (!i) bool = false;
+        });
+
+        if (bool) {
+            animateComponent()
+        }
+        return bool
+    }
+
+
+    return [setLoadingItems, animatedStyle]
+}
