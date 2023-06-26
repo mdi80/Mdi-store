@@ -5839,6 +5839,11 @@ react-is@^17.0.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
+react-native-basic-carousel@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/react-native-basic-carousel/-/react-native-basic-carousel-1.0.9.tgz#79b72401650119ee376ce1d9612afd9ee450f07f"
+  integrity sha512-Yc3AvuDXcLsM4eE0WbCLCNN6/Vxmlfpci492UYdD+jTzfABtq7P1kInTILz7gbXMu723ryPe7YLSHdcz8YRd5A==
+
 react-native-codegen@^0.71.5:
   version "0.71.5"
   resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.71.5.tgz#454a42a891cd4ca5fc436440d301044dc1349c14"

@@ -13,7 +13,7 @@ import Animated, {
     StretchInX,
 } from 'react-native-reanimated';
 import theme from "../theme";
-import { useDataFetching } from "../utils";
+import { handleLoad, handleLoadStart, useDataFetching, useLoadingAnim } from "../utils";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -146,42 +146,14 @@ const stylesSearchbar = StyleSheet.create({
 })
 
 
+
+
+////Start of first component
 export const HomeScreenCategoriaclList = (props) => {
-    const [loadingImage, setLoadingImage] = useState([])
+    // const [loadingImage, setLoadingImage] = useState([])
     const [data, setData] = useState([])
     useDataFetching(props.urlItems, setData)
-
-    // Handle Animations of component
-    const comOpacity = useSharedValue(0); // Initial opacity value
-    const animateComponent = () => {
-        comOpacity.value = withTiming(1, { duration: 400 }); // Fade-in animation with a duration of 1000ms
-    };
-
-    const animatedStyle = useAnimatedStyle(() => {
-        return {
-            opacity: comOpacity.value, // Apply the animated opacity value to the component
-        };
-    });
-
-
-    useEffect(() => {
-        allImageLoaded()
-    }, [loadingImage])
-
-
-    const allImageLoaded = () => {
-        let bool = true;
-        if (loadingImage.length == 0) return false;
-        loadingImage.forEach(i => {
-            if (!i) bool = false;
-        });
-
-        if (bool) {
-            animateComponent()
-        }
-        return bool
-    }
-
+    const [setLoadingItems, animatedStyle] = useLoadingAnim();
 
     return (
         <>
@@ -202,7 +174,7 @@ export const HomeScreenCategoriaclList = (props) => {
                                 key={index}
                                 item={{ ...item, recDays: 1 }}
                                 index={index}
-                                setLoadingImage={setLoadingImage} />
+                                setLoadingImage={setLoadingItems} />
                         )
                     }
                     {data.length >= 6 &&
@@ -221,30 +193,16 @@ export const HomeScreenCategoriaclList = (props) => {
     )
 }
 
-const CategoricalItem = ({ item, setLoadingImage, index }) => {
-    const handleLoadStart = (index) => {
-        setLoadingImage(prevState => {
-            let newState = [...prevState];
-            newState[index] = false;
-            return newState;
-        });
-    };
 
-    const handleLoad = (index) => {
-        setLoadingImage(prevState => {
-            let newState = [...prevState];
-            newState[index] = true;
-            return newState;
-        });
-    };
+const CategoricalItem = ({ item, setLoadingImage, index }) => {
     return (
         <TouchableOpacity style={stylesCategoriaclList.itemView} activeOpacity={1}>
             <View>
                 <Image
                     source={{ uri: item.image[0].image }}
                     style={stylesCategoriaclList.imageItem}
-                    onLoadStart={() => handleLoadStart(index)}
-                    onLoad={() => handleLoad(index)} />
+                    onLoadStart={() => handleLoadStart(index, setLoadingImage)}
+                    onLoad={() => handleLoad(index, setLoadingImage)} />
 
                 <Text
                     style={stylesCategoriaclList.titleTextItem}
@@ -389,27 +347,28 @@ const stylesCategoriaclList = StyleSheet.create({
     }
 })
 
-
+////// Start of second component
 export const CategoryCom = (prop) => {
     const itemsPerLine = 3;
     const [data, setData] = useState([])
     useDataFetching(prop.urlItems, setData)
+    const [setLoadingItems, animatedStyle] = useLoadingAnim();
 
 
     return (
-        <View style={{ ...stylesCategoryCom.container }}>
+        <Animated.View style={[stylesCategoryCom.container, animatedStyle]}>
             <Text style={{
                 justifyContent: 'center', alignSelf: 'center', fontSize: 1.5 * theme.typography.fontSize.header, fontWeight: 600, fontFamily: theme.typography.fontFamily
             }}>Categories</Text>
             {[...Array(Math.ceil(data.length / itemsPerLine))].map((_, rowIndex) => (
                 <View key={rowIndex} style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    {data.slice(rowIndex * itemsPerLine, (rowIndex + 1) * itemsPerLine).map(item => (
-                        <ImageButton key={item.id} src={{ uri: item.image }} title={item.title} />
+                    {data.slice(rowIndex * itemsPerLine, (rowIndex + 1) * itemsPerLine).map((item, index) => (
+                        <ImageButton key={item.id} src={{ uri: item.image }} title={item.title} index={index} setLoadingItems={setLoadingItems} />
                     ))}
                 </View>
             ))}
 
-        </View>
+        </Animated.View>
     )
 }
 export const ImageButton = (props) => {
@@ -417,7 +376,11 @@ export const ImageButton = (props) => {
 
     return (
         <TouchableOpacity style={{ ...props.style, ...stylesCategoryCom.imageButton.container }} activeOpacity={0.7} >
-            <Image source={props.src} style={stylesCategoryCom.imageButton.image} onError={() => dispatch(setError({ networkError: true }))} />
+            <Image
+                onLoadStart={() => handleLoadStart(props.index, props.setLoadingItems)}
+                onLoad={() => handleLoad(props.index, props.setLoadingItems)}
+                source={props.src} style={stylesCategoryCom.imageButton.image}
+                onError={() => dispatch(setError({ networkError: true }))} />
             <Text style={stylesCategoryCom.imageButton.text}>{props.title}</Text>
         </TouchableOpacity>
     )
@@ -451,15 +414,16 @@ const stylesCategoryCom = StyleSheet.create({
     }
 })
 
-
 export const RecentProductView = (props) => {
     const itemsPerLine = 3;
     const maxHeight = 3;
+    const [setLoadingItems, animatedStyle] = useLoadingAnim();
 
     const [data, setData] = useState([])
     useDataFetching(props.url, setData);
     return (
-        <View style={stylesRecentView.container} >
+
+        <Animated.View style={[stylesRecentView.container, animatedStyle]} >
             <Text style={stylesRecentView.titleText}>{props.title}{"\n"}
                 <Text style={stylesRecentView.subText}>{props.subtitle}</Text>
             </Text>
@@ -483,7 +447,10 @@ export const RecentProductView = (props) => {
                                         key={item.id}
                                         source={{ uri: item.image[0].image }}
                                         style={stylesRecentView.imageView}
+                                        onLoad={() => handleLoad(pos, setLoadingItems)}
+                                        onLoadStart={() => handleLoadStart(pos, setLoadingItems)}
                                     />
+
                                 </TouchableOpacity>
                             </View>
                         ))
@@ -493,10 +460,9 @@ export const RecentProductView = (props) => {
 
 
             }
-        </View >
+        </Animated.View >
     )
 }
-
 
 const stylesRecentView = StyleSheet.create({
     container: {
@@ -506,7 +472,7 @@ const stylesRecentView = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    
+
     rowContainer: {
         flexDirection: 'row',
     },
@@ -532,12 +498,11 @@ const stylesRecentView = StyleSheet.create({
 
 })
 
-
-
 export const MostProductsView = (props) => {
     const numberOfShow = 6
     const [data, setData] = useState([])
     useDataFetching(props.uri, setData)
+    const [setLoadingItems, animatedStyle] = useLoadingAnim();
 
     return (
         <View style={stylesMostProductsView.container}>
@@ -549,7 +514,11 @@ export const MostProductsView = (props) => {
                             key={index}
                             item={{ ...item, recDays: 1 }}
                             index={index}
+                            onLoad={() => handleLoad(index, setLoadingItems)}
+                            onLoadStart={() => handleLoadStart(index, setLoadingItems)}
+
                         />
+
                     )
                 }
                 {data.length >= numberOfShow &&
@@ -571,7 +540,7 @@ const MostProductsItem = (props) => {
 
     return (
         <TouchableOpacity style={stylesMostProductsView.item} activeOpacity={0.88}>
-            <Image source={{ uri: props.item.image[0].image }} style={stylesMostProductsView.item.image} />
+            <Image source={{ uri: props.item.image[0].image }} onLoad={props.onLoad} onLoadStart={props.onLoadStart} style={stylesMostProductsView.item.image} />
             <Text style={stylesMostProductsView.item.text} numberOfLines={2}>{props.item.title}</Text>
             <View style={{ flexDirection: 'row' }}>
                 <Icon name="rocket" size={15} color={theme.colors.primary} />
@@ -591,6 +560,7 @@ const MostProductsItem = (props) => {
 
     )
 }
+
 const stylesMostProductsView = StyleSheet.create({
 
     container: {
@@ -633,3 +603,6 @@ const stylesMostProductsView = StyleSheet.create({
     },
 })
 
+
+
+export const componentsHeight = { CategoryCom: stylesCategoryCom.container.height, HomeScreenCategoriaclList: stylesCategoriaclList.container.height, RecentProductView: stylesRecentView.container.height, MostProductsView: stylesMostProductsView.container.height }
