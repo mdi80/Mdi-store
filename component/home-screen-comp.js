@@ -605,4 +605,9 @@ const stylesMostProductsView = StyleSheet.create({
 
 
 
-export const componentsHeight = { CategoryCom: stylesCategoryCom.container.height, HomeScreenCategoriaclList: stylesCategoriaclList.container.height, RecentProductView: stylesRecentView.container.height, MostProductsView: stylesMostProductsView.container.height }
+export const componentsHeight = {
+    CategoryCom: stylesCategoryCom.container.height,
+    HomeScreenCategoriaclList: stylesCategoriaclList.container.height,
+    RecentProductView: stylesRecentView.container.height,
+    MostProductsView: stylesMostProductsView.container.height
+}
