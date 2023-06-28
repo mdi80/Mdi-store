@@ -14,6 +14,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import theme from "../theme";
 import { handleLoad, handleLoadStart, useDataFetching, useLoadingAnim } from "../utils";
+import { handleToProductPage } from "../screens/product";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -196,7 +197,7 @@ export const HomeScreenCategoriaclList = (props) => {
 
 const CategoricalItem = ({ item, setLoadingImage, index }) => {
     return (
-        <TouchableOpacity style={stylesCategoriaclList.itemView} activeOpacity={1}>
+        <TouchableOpacity style={stylesCategoriaclList.itemView} activeOpacity={1} onPress={() => handleToProductPage(item.id)}>
             <View>
                 <Image
                     source={{ uri: item.image[0].image }}
@@ -611,3 +612,5 @@ export const componentsHeight = {
     RecentProductView: stylesRecentView.container.height,
     MostProductsView: stylesMostProductsView.container.height
 }
+
+
