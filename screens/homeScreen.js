@@ -47,14 +47,8 @@ export default function HomeScreen() {
         { Comp: ({ data }) => <RecentProductView data={data} url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4" title="Digital Product" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 7 },
         { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=5" title="Top Sale" />, height: componentsHeight.MostProductsView, key: 8 },
         { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Mobile" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 9 },
-        { Comp: ({ data }) => <RecentProductView data={data} url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4" title="Digital Product" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 7 },
-        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=5" title="Top Sale" />, height: componentsHeight.MostProductsView, key: 8 },
-        { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Mobile" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 9 },
-        { Comp: ({ data }) => <RecentProductView data={data} url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4" title="Digital Product" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 7 },
-        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=5" title="Top Sale" />, height: componentsHeight.MostProductsView, key: 8 },
-        { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Mobile" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 9 },
-
     ]
+
 
 
     const RenderParent = ({ item }) => {
@@ -65,25 +59,21 @@ export default function HomeScreen() {
         })
         return (
             <View style={{ height: item.height }}>
-                {/* {console.log(item.height)} */}
                 <item.Comp data={data} />
             </View>
         )
     }
 
-    const renderComp = ({ item }) => {
-
+    const getComp = (data, index) => {
+        return data[index]
     }
     return (
-        <SafeAreaView style={styles.container} >
+        <View style={styles.container} >
             <SearchBarHome />
-            <VirtualizedList initialNumToRender={4} getItemCount={() => homeScreenComponents.length} getItem={(data, index) => homeScreenComponents[index]} data={homeScreenComponents} renderItem={({ item }) => <RenderParent item={item} />} keyExtractor={(item) => item.key} />
+            <VirtualizedList getItemCount={() => homeScreenComponents.length} getItem={getComp} data={homeScreenComponents} renderItem={({ item }) => <RenderParent item={item} />} keyExtractor={(item) => item.key} />
 
-            {/* {homeScreenComponents.map((Comp, index) => <Comp key={index} />)} */}
-
-            {/* <View style={{ height: 200 }}></View> */}
             <StatusBar style="auto" />
-        </SafeAreaView>
+        </View>
     )
 }
 
