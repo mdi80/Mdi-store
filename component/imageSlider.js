@@ -6,19 +6,26 @@ const screenWidth = Dimensions.get('window').width;
 const Indicator = ({ data, scrollX }) => {
     const inputRangePos = [];
     const outputRangePos = [];
-    for (let j = 0; j < data.length; j++) {
-        inputRangePos.push(j * screenWidth);
-    }
-    outputRangePos.push(0);
-    let sum = 0;
-    const t = data.length * 10 + 5
-    for (let j = 0; j < data.length - 3; j++) {
-        outputRangePos.push(sum);
-        sum += parseInt(t / (data.length - 3))
-    }
-    outputRangePos.push(t);
-    outputRangePos.push(t);
 
+    if (data.length > 4) {
+        for (let j = 0; j < data.length; j++) {
+            inputRangePos.push(j * screenWidth);
+        }
+        outputRangePos.push(0);
+        let sum = 0;
+        const t = data.length * 10 + 5
+        for (let j = 0; j < data.length - 3; j++) {
+            outputRangePos.push(sum);
+            sum += parseInt(t / (data.length - 3))
+        }
+        outputRangePos.push(t);
+        outputRangePos.push(t);
+    } else {
+        inputRangePos.push(0)
+        inputRangePos.push(screenWidth)
+        outputRangePos.push(0)
+        outputRangePos.push(0)
+    }
     const position = scrollX.interpolate({
         inputRange: inputRangePos,
         outputRange: outputRangePos,
@@ -89,8 +96,7 @@ export default function ImageSlider(props) {
                 renderItem={renderItem}
                 pagingEnabled
             />
-
-            <Indicator data={props.data} scrollX={scrollX} />
+            {(props.data.length > 1) && <Indicator data={props.data} scrollX={scrollX} />}
 
         </View>
     )

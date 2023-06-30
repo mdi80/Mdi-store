@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { View, Text, StyleSheet, StatusBar } from 'react-native'
-import { ImageSliderProduct } from '../component/product-component'
+import { ProductImages } from '../component/product-component'
+import ImageSlider from '../component/imageSlider'
 
 
 export const handleToProductPage = (product, navigation) => {
@@ -16,7 +17,7 @@ export default function ProductScreen({ navigation, route }) {
     return (
         <View style={styles.container}>
             <View style={styles.status} />
-            <ImageSliderProduct imagesUrl={product.image} />
+            <ProductImages product={product}/>
 
         </View>
     )
