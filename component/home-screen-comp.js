@@ -15,6 +15,7 @@ import Animated, {
 import theme from "../theme";
 import { handleLoad, handleLoadStart, useDataFetching, useLoadingAnim } from "../utils";
 import { handleToProductPage } from "../screens/product";
+import { useNavigation } from "@react-navigation/native";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -156,6 +157,7 @@ export const HomeScreenCategoriaclList = (props) => {
     useDataFetching(props.urlItems, setData)
     const [setLoadingItems, animatedStyle] = useLoadingAnim();
 
+
     return (
         <>
             <Animated.View style={[{ ...stylesCategoriaclList.container, backgroundColor: props.backColor }, animatedStyle]}>
@@ -196,8 +198,9 @@ export const HomeScreenCategoriaclList = (props) => {
 
 
 const CategoricalItem = ({ item, setLoadingImage, index }) => {
+    const navigation = useNavigation()
     return (
-        <TouchableOpacity style={stylesCategoriaclList.itemView} activeOpacity={1} onPress={() => handleToProductPage(item.id)}>
+        <TouchableOpacity style={stylesCategoriaclList.itemView} activeOpacity={0.9} onPress={() => { handleToProductPage(item, navigation); console.log('clicked'); }}>
             <View>
                 <Image
                     source={{ uri: item.image[0].image }}

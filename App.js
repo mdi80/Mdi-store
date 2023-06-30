@@ -93,7 +93,9 @@ function AppContainer() {
                 headerShown: false
               }} />
 
-              <Stack.Screen name="Product" component={ProductScreen} />
+              <Stack.Screen name="Product" component={ProductScreen} options={{
+                headerShown: false
+              }} />
 
             </>
           }
