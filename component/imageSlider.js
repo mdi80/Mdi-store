@@ -33,7 +33,7 @@ const Indicator = ({ data, scrollX }) => {
     })
 
     return (
-        <View style={{ position: 'absolute', bottom: 20, left: 50, width: 70, overflow: 'hidden' }}>
+        <View style={{ position: 'absolute', bottom: 20, right: 30, width: 70, overflow: 'hidden' }}>
 
             <Animated.View style={{ flexDirection: 'row', right: position }}>
 
