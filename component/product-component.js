@@ -75,10 +75,11 @@ export const ProductDetails = ({ product }) => {
                         </View>
                     }
                 </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ fontSize: theme.typography.fontSize.header + 5, fontFamily: theme.typography.fontFamily, fontWeight: 'bold' }}>{product.title} {product.title}
+                <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', paddingRight: 1, width: '100%' }}>
+                    <Text style={{ flex: 15, fontSize: theme.typography.fontSize.header + 5, fontFamily: theme.typography.fontFamily, fontWeight: 'bold' }}>
+                        {product.title} {product.title} {product.title} {product.title}
                     </Text>
-                    <MaterialIcon color={theme.colors.primary} style={{ marginLeft: 5 }} name="fiber-new" size={20} />
+                    <MaterialIcon style={{ flex: 1 }} color={theme.colors.primary} name="fiber-new" size={20} />
 
                 </View>
 
@@ -186,4 +187,40 @@ export function ProductFeatures({ product }) {
             </View>
         </View>
     )
-}   
+}
+
+
+
+export function CommentsProduct(props) {
+
+
+    return (
+
+        <View style={{}}>
+            <FlatList
+
+            />
+        </View>
+    )
+}
+
+const CommentComp = (props) => {
+
+    return (
+
+        <View style={{ padding: 10, borderBottomColor: 'gray', borderBottomWidth: 2 }}>
+            <View style={{ flexDirection: 'row' }}>
+
+            </View>
+
+            <View>
+                <Text>
+                    {props.item.body}
+                </Text>
+            </View>
+            <View>
+                
+            </View>
+        </View>
+    )
+}
