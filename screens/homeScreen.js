@@ -31,22 +31,22 @@ export default function HomeScreen() {
             />, height: componentsHeight.HomeScreenCategoriaclList, key: 3
         },
 
-        { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=2" title="Recent Products" subtitle="Based on Recent views" />, height: componentsHeight.RecentProductView, key: 4 },
+        // { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=2" title="Recent Products" subtitle="Based on Recent views" />, height: componentsHeight.RecentProductView, key: 4 },
 
-        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=3" title="Most Viewed" />, height: componentsHeight.MostProductsView, key: 5 },
+        // { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=3" title="Most Viewed" />, height: componentsHeight.MostProductsView, key: 5 },
 
-        {
-            Comp: () => <HomeScreenCategoriaclList
-                hadleTitleView={<TitleViewCategoricalList />}
-                imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
-                urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4"
-                backColor={theme.colors.secondary}
+        // {
+        //     Comp: () => <HomeScreenCategoriaclList
+        //         hadleTitleView={<TitleViewCategoricalList />}
+        //         imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
+        //         urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4"
+        //         backColor={theme.colors.secondary}
 
-            />, height: componentsHeight.HomeScreenCategoriaclList, key: 6
-        },
-        { Comp: ({ data }) => <RecentProductView data={data} url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4" title="Digital Product" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 7 },
-        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=5" title="Top Sale" />, height: componentsHeight.MostProductsView, key: 8 },
-        { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Mobile" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 9 },
+        //     />, height: componentsHeight.HomeScreenCategoriaclList, key: 6
+        // },
+        // { Comp: ({ data }) => <RecentProductView data={data} url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4" title="Digital Product" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 7 },
+        // { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=5" title="Top Sale" />, height: componentsHeight.MostProductsView, key: 8 },
+        // { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Mobile" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 9 },
     ]
 
 

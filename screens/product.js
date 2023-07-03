@@ -1,9 +1,10 @@
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { View, Text, StyleSheet, StatusBar, Animated, ScrollView } from 'react-native'
-import { HeaderProduct, ProductDetails } from '../component/product-component'
+import { HeaderProduct, ProductColor, ProductDesc, ProductDetails, ProductFeatures } from '../component/product-component'
 import ImageSlider from '../component/imageSlider'
 import { FlatList } from 'react-native-gesture-handler'
+import { MostProductsView } from '../component/home-screen-comp'
 
 
 export const handleToProductPage = (product, navigation) => {
@@ -31,6 +32,11 @@ export default function ProductScreen({ navigation, route }) {
 
                 <ProductDetails product={product} />
 
+                <ProductColor product={product} />
+
+                <ProductDesc product={product} />
+                <ProductFeatures product={product} />
+                <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=5" title="Top Sale" />
             </ScrollView>
 
         </View>
