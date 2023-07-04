@@ -239,7 +239,7 @@ const CategoricalItem = ({ item, setLoadingImage, index }) => {
 }
 
 
-const ShowPrice = ({ price, discount }) => (
+export const ShowPrice = ({ price, discount }) => (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
 
         <View>
