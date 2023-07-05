@@ -149,7 +149,7 @@ const stylesSearchbar = StyleSheet.create({
 export const HeaderComponent = (props) => {
 
     const handleImageSelect = (imageId) => {
-
+        //TODO go to related page
     }
 
 
