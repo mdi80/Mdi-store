@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { Image, StyleSheet, Text, View, Dimensions, Button, Animated } from "react-native";
-import { CategoryCom, GridProductView, ScrollableRowList, HomeScreenSuggestList, ImageButton, MostProductsView, SearchBarHome, HeaderComponent, stylesHeaderComp } from "../component/home-screen-comp";
+import { CategoryCom, GridProductView, ScrollableRowList, MostProductsView, SearchBarHome, HeaderComponent } from "../component/home-screen-comp";
 import { ScrollView } from "react-native-gesture-handler";
 import theme from "../theme";
 import { useRef, useState } from "react";
@@ -14,95 +14,26 @@ const TitleViewScrollableList = () => (
     </View>
 )
 
+const imageHeaderData = [
+    { id: 1, image: "https://dkstatics-public.digikala.com/digikala-adservice-banners/fbb8693242a28dc5da78de43bfc765dc1a2ac9fa_1688462031.jpg?x-oss-process=image/quality,q_95/format,webp" },
+    { id: 2, image: "https://dkstatics-public.digikala.com/digikala-adservice-banners/6ffa5c9aa0fdf023c5011766d39708b828af10f7_1687875626.jpg?x-oss-process=image/quality,q_95/format,webp" },
+    { id: 3, image: "https://dkstatics-public.digikala.com/digikala-adservice-banners/798082ab645726f660e0130a78b14c86b9bcd336_1684071126.jpg?x-oss-process=image/quality,q_95/format,webp" },
+    { id: 4, image: "https://dkstatics-public.digikala.com/digikala-adservice-banners/d31a80d2ea931f08317b726b74cf417ffe0c2a6f_1688478968.jpg?x-oss-process=image/quality,q_95/format,webp" },
+]
 
 export default function HomeScreen() {
     const scrollY = useRef(new Animated.Value(0)).current;
-
+    const scrollSnap = 250
     const handleScroll = Animated.event(
         [{ nativeEvent: { contentOffset: { y: scrollY } } }],
         { useNativeDriver: false }
     );
-
-    const scrollSnap = 250
-
-    const inputRange = [0, scrollSnap]
-    const inputRange2 = [0, scrollSnap / 2, scrollSnap]
-    const animatedHeight = scrollY.interpolate({
-        inputRange: inputRange, // Adjust these values as per your requirements
-        outputRange: [(screenWidth / 2 - 10) * 3 / 4, (screenWidth / 2 - 10) * 3 / 10], // Adjust these values as per your requirements
-        extrapolate: 'clamp',
-    });
-    const animatedHeight1 = scrollY.interpolate({
-        inputRange: inputRange2, // Adjust these values as per your requirements
-        outputRange: [(screenWidth / 2 - 10) * 3 / 4, (screenWidth / 2 - 10) * 3 / 10, (screenWidth / 2 - 10) * 3 / 10], // Adjust these values as per your requirements
-        extrapolate: 'clamp',
-    });
-
-    const animatedHeight2 = scrollY.interpolate({
-        inputRange: inputRange2, // Adjust these values as per your requirements
-        outputRange: [(screenWidth / 2 - 10) * 3 / 4, (screenWidth / 2 - 10) * 3 / 4, (screenWidth / 2 - 10) * 3 / 10], // Adjust these values as per your requirements
-        extrapolate: 'clamp',
-    });
-
-
-    const animatedWidth1 = scrollY.interpolate({
-        inputRange: inputRange2, // Adjust these values as per your requirements
-        outputRange: [(screenWidth / 2 - 10), (screenWidth / 2 - 10) / 2.5, (screenWidth / 2 - 10) / 2.5], // Adjust these values as per your requirements
-        extrapolate: 'clamp',
-    });
-    const animatedposX34 = scrollY.interpolate({
-        inputRange: inputRange2, // Adjust these values as per your requirements
-        outputRange: [4, (screenWidth / 2 - 10) / 2 + 10, (screenWidth / 2 - 10) / 2 + 12.5], // Adjust these values as per your requirements
-        extrapolate: 'clamp',
-    });
-    const animatedposY3 = scrollY.interpolate({
-        inputRange: inputRange, // Adjust these values as per your requirements
-        outputRange: [(3 * (screenWidth / 2 - 10) / 4) + 5, 0], // Adjust these values as per your requirements
-        extrapolate: 'clamp',
-    });
-    const animatedHeightContainer = scrollY.interpolate({
-        inputRange: inputRange, // Adjust these values as per your requirements
-        outputRange: [(screenWidth / 2 - 10) * 3 / 2 + 10, (screenWidth / 2 - 10) * 3 / 8 ], // Adjust these values as per your requirements
-        extrapolate: 'clamp',
-    });
-
-    const animatCor = scrollY.interpolate({
-        inputRange: inputRange, // Adjust these values as per your requirements
-        outputRange: [theme.raduis.large, theme.raduis.large * 1.5], // Adjust these values as per your requirements
-        extrapolate: 'clamp',
-    });
-    const elevation = scrollY.interpolate({
-        inputRange: inputRange, // Adjust these values as per your requirements
-        outputRange: [0, 2], // Adjust these values as per your requirements
-        extrapolate: 'clamp',
-    });
     return (
         <View style={styles.container} >
             <SearchBarHome />
-            {/* <HeaderComponent animated={animatedStyle} setPosY={setPosY} /> */}
-
-
-            <Animated.View style={{ height: animatedHeightContainer, zIndex: 2, position: 'absolute', top: 100, width: "100%", backgroundColor: 'white', elevation }}>
-                <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', height: animatedHeight1, left: 4, borderRadius: animatCor }}>
-
-                    <Image source={require("../assets/h1.webp")} style={{ ...stylesHeaderComp.image, zIndex: 0, width: '100%', height: "100%", resizeMode: 'contain' }} />
-                </Animated.View>
-                <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', height: animatedHeight1, right: 4, borderRadius: animatCor }}>
-                    <Image source={require("../assets/h2.webp")} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%", resizeMode: 'contain' }} />
-                </Animated.View>
-                <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', top: animatedposY3, height: animatedHeight1, left: animatedposX34, borderRadius: animatCor }}>
-                    <Image source={require("../assets/h3.webp")} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
-                </Animated.View>
-                <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', right: animatedposX34, height: animatedHeight1, top: animatedposY3, borderRadius: animatCor }}>
-                    <Image source={require("../assets/h4.webp")} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
-                </Animated.View>
-            </Animated.View >
+            <HeaderComponent scrollY={scrollY} scrollSnap={scrollSnap} data={imageHeaderData} />
             <ScrollView onScroll={handleScroll} scrollEventThrottle={16} contentContainerStyle={{ paddingTop: 300 }} snapToOffsets={[0, scrollSnap]} decelerationRate="normal" snapToEnd={false}>
 
-                {/* <Animated.View style={{ height: animatedScrollHight }}>
-
-                </Animated.View> */}
-                {/* <Image source={require('../assets/p1.png')} style={styles.bannerImage} /> */}
                 <CategoryCom urlItems="https://mdi80nz.pythonanywhere.com/api/get-categories/" />
 
                 <ScrollableRowList

@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { BackHandler, Button, Dimensions, Image, Keyboard, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
+import { Component, useEffect, useRef, useState } from "react";
+import { Animated as AnimReact, BackHandler, Button, Dimensions, Image, Keyboard, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
 import { PanGestureHandler, ScrollView } from "react-native-gesture-handler";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -9,9 +9,9 @@ import Animated, {
     useSharedValue,
     withTiming,
     useAnimatedStyle,
-    set,
-    StretchInX,
 } from 'react-native-reanimated';
+
+
 import theme from "../theme";
 import { useDataFetching } from "../utils";
 
@@ -148,38 +148,92 @@ const stylesSearchbar = StyleSheet.create({
 
 export const HeaderComponent = (props) => {
 
-    const image1 = useRef(null)
-    const image2 = useRef(null)
-    const image3 = useRef(null)
-    const image4 = useRef(null)
+    const handleImageSelect = (imageId) => {
 
-    // const posX1 = useSharedValue(103)
+    }
 
-    // const gestureHandler = Animated.event([{ nativeEvent: { translationY: posY1,translationX :  } }], {
-    //     useNativeDriver: true,
-    // });
 
-    // const startAnimation = () => {
-    //     posY1.value = withTiming();
-    // };
+
+    const scrollY = props.scrollY;
+
+    const compWidth = screenWidth
+
+    const padding = (screenWidth + 100) / 100
+    const itemWidth = (compWidth / 2 - (padding * 3))
+
+    const scrollSnap = props.scrollSnap
+
+    const inputRange = [0, scrollSnap]
+    const inputRange2 = [0, scrollSnap / 2, scrollSnap]
+
+    const animatedHeight1 = scrollY.interpolate({
+        inputRange: inputRange2,
+        outputRange: [itemWidth * 3 / 4, itemWidth * 3 / 10, itemWidth * 3 / 10],
+        extrapolate: 'clamp',
+    });
+
+    const animatedWidth1 = scrollY.interpolate({
+        inputRange: inputRange2,
+        outputRange: [itemWidth, itemWidth / 2.5, itemWidth / 2.5],
+        extrapolate: 'clamp',
+    });
+    const animatedposX34 = scrollY.interpolate({
+        inputRange: inputRange2,
+        outputRange: [padding, itemWidth / 2 + (padding * 3), itemWidth / 2 + (padding * 3)],
+        extrapolate: 'clamp',
+    });
+    const animatedposY3 = scrollY.interpolate({
+        inputRange: inputRange,
+        outputRange: [(3 * itemWidth / 4) + 5, 0],
+        extrapolate: 'clamp',
+    });
+    const animatedHeightContainer = scrollY.interpolate({
+        inputRange: inputRange,
+        outputRange: [itemWidth * 3 / 2 + 10, itemWidth * 3 / 8],
+        extrapolate: 'clamp',
+    });
+
+    const animatCor = scrollY.interpolate({
+        inputRange: inputRange,
+        outputRange: [theme.raduis.large, theme.raduis.large * 1.5],
+        extrapolate: 'clamp',
+    });
+    const elevation = scrollY.interpolate({
+        inputRange: inputRange,
+        outputRange: [0, 2],
+        extrapolate: 'clamp',
+    });
 
 
     return (
-        <View>
-            <View style={stylesHeaderComp.rowContainer} onPress={() => { }}>
-                {/* {console.log((1 + (props.pos > 89 ? 89 : props.pos) / 89))} */}
-                <Animated.View style={{ ...props.animated, }}>
-                    <Image source={require("../assets/h1.webp")} style={{ ...stylesHeaderComp.image1, width: '100%', height: "100%" }} ref={image1} />
-                </Animated.View>
-                {/* <Image source={require("../assets/h2.webp")} style={stylesHeaderComp.image2} ref={image2} /> */}
-            </View>
-            <View style={stylesHeaderComp.rowContainer}>
 
-                {/* <Image source={require("../assets/h3.webp")} style={stylesHeaderComp.image3} ref={image3} />
-                <Image source={require("../assets/h4.webp")} style={stylesHeaderComp.image4} ref={image4} /> */}
-            </View>
+        <AnimReact.View style={{ height: animatedHeightContainer, zIndex: 2, position: 'absolute', top: 100, width: compWidth, backgroundColor: 'white', elevation }}>
 
-        </View>
+            <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', height: animatedHeight1, left: padding, borderRadius: animatCor }}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[0].id)}>
+
+                    <Image source={{ uri: props.data[0].image }} style={{ ...stylesHeaderComp.image, zIndex: 0, width: '100%', height: "100%", resizeMode: 'contain' }} />
+                </TouchableOpacity>
+            </AnimReact.View>
+            <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', height: animatedHeight1, right: padding, borderRadius: animatCor }}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[1].id)}>
+
+                    <Image source={{ uri: props.data[1].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%", resizeMode: 'contain' }} />
+
+                </TouchableOpacity>
+            </AnimReact.View>
+            <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', top: animatedposY3, height: animatedHeight1, left: animatedposX34, borderRadius: animatCor }}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[2].id)}>
+
+                    <Image source={{ uri: props.data[2].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
+                </TouchableOpacity>
+            </AnimReact.View>
+            <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', right: animatedposX34, height: animatedHeight1, top: animatedposY3, borderRadius: animatCor }}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[3].id)}>
+                    <Image source={{ uri: props.data[3].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
+                </TouchableOpacity>
+            </AnimReact.View>
+        </AnimReact.View >
     )
 }
 
