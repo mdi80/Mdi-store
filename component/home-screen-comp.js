@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { BackHandler, Button, Dimensions, Image, Keyboard, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
-import { ScrollView } from "react-native-gesture-handler";
+import { Component, useEffect, useRef, useState } from "react";
+import { Animated as AnimReact, BackHandler, Button, Dimensions, Image, Keyboard, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
+import { PanGestureHandler, ScrollView } from "react-native-gesture-handler";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useDispatch, useSelector } from "react-redux";
@@ -9,9 +9,9 @@ import Animated, {
     useSharedValue,
     withTiming,
     useAnimatedStyle,
-    set,
-    StretchInX,
 } from 'react-native-reanimated';
+
+
 import theme from "../theme";
 import { handleLoad, handleLoadStart, useDataFetching, useLoadingAnim } from "../utils";
 
@@ -101,7 +101,6 @@ const stylesSearchbar = StyleSheet.create({
     searchBarRoot: {
         height: 100,
         borderBottomColor: 'gray',
-        elevation: 1,
         backgroundColor: 'white',
 
         text: {
@@ -148,29 +147,161 @@ const stylesSearchbar = StyleSheet.create({
 
 
 
-////Start of first component
-export const HomeScreenCategoriaclList = (props) => {
-    // const [loadingImage, setLoadingImage] = useState([])
+export const HeaderComponent = (props) => {
+
+    const handleImageSelect = (imageId) => {
+        //TODO go to related page
+    }
+
+
+
+    const scrollY = props.scrollY;
+
+    const compWidth = screenWidth
+
+    const padding = (screenWidth + 100) / 100
+    const itemWidth = (compWidth / 2 - (padding * 3))
+
+    const scrollSnap = props.scrollSnap
+
+    const inputRange = [0, scrollSnap]
+    const inputRange2 = [0, scrollSnap / 2, scrollSnap]
+
+    const animatedHeight1 = scrollY.interpolate({
+        inputRange: inputRange2,
+        outputRange: [itemWidth * 3 / 4, itemWidth * 3 / 10, itemWidth * 3 / 10],
+        extrapolate: 'clamp',
+    });
+
+    const animatedWidth1 = scrollY.interpolate({
+        inputRange: inputRange2,
+        outputRange: [itemWidth, itemWidth / 2.5, itemWidth / 2.5],
+        extrapolate: 'clamp',
+    });
+    const animatedposX34 = scrollY.interpolate({
+        inputRange: inputRange2,
+        outputRange: [padding, itemWidth / 2 + (padding * 3), itemWidth / 2 + (padding * 3)],
+        extrapolate: 'clamp',
+    });
+    const animatedposY3 = scrollY.interpolate({
+        inputRange: inputRange,
+        outputRange: [(3 * itemWidth / 4) + 5, 0],
+        extrapolate: 'clamp',
+    });
+    const animatedHeightContainer = scrollY.interpolate({
+        inputRange: inputRange,
+        outputRange: [itemWidth * 3 / 2 + 10, itemWidth * 3 / 8],
+        extrapolate: 'clamp',
+    });
+
+    const animatCor = scrollY.interpolate({
+        inputRange: inputRange,
+        outputRange: [theme.raduis.large, theme.raduis.large * 1.5],
+        extrapolate: 'clamp',
+    });
+    const elevation = scrollY.interpolate({
+        inputRange: inputRange,
+        outputRange: [0, 2],
+        extrapolate: 'clamp',
+    });
+
+
+    return (
+
+        <AnimReact.View style={{ height: animatedHeightContainer, zIndex: 2, position: 'absolute', top: 100, width: compWidth, backgroundColor: 'white', elevation }}>
+
+            <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', height: animatedHeight1, left: padding, borderRadius: animatCor }}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[0].id)}>
+
+                    <Image source={{ uri: props.data[0].image }} style={{ ...stylesHeaderComp.image, zIndex: 0, width: '100%', height: "100%", resizeMode: 'contain' }} />
+                </TouchableOpacity>
+            </AnimReact.View>
+            <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', height: animatedHeight1, right: padding, borderRadius: animatCor }}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[1].id)}>
+
+                    <Image source={{ uri: props.data[1].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%", resizeMode: 'contain' }} />
+
+                </TouchableOpacity>
+            </AnimReact.View>
+            <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', top: animatedposY3, height: animatedHeight1, left: animatedposX34, borderRadius: animatCor }}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[2].id)}>
+
+                    <Image source={{ uri: props.data[2].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
+                </TouchableOpacity>
+            </AnimReact.View>
+            <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', right: animatedposX34, height: animatedHeight1, top: animatedposY3, borderRadius: animatCor }}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[3].id)}>
+                    <Image source={{ uri: props.data[3].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
+                </TouchableOpacity>
+            </AnimReact.View>
+        </AnimReact.View >
+    )
+}
+
+export const stylesHeaderComp = StyleSheet.create({
+    rowContainer: {
+        flexDirection: 'row',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+    },
+    animateImage: {
+        margin: 3,
+        position: 'absolute',
+        borderRadius: theme.raduis.large,
+
+    },
+    image: {
+    },
+    image2: {
+        width: screenWidth / 2 - 10,
+        height: (screenWidth / 2 - 10) * 3 / 4,
+        borderRadius: theme.raduis.large,
+        position: 'absolute',
+        left: 10,
+        top: 10,
+    },
+    image3: {
+        width: screenWidth / 2 - 10,
+        height: (screenWidth / 2 - 10) * 3 / 4,
+        borderRadius: theme.raduis.large,
+        position: 'absolute',
+        left: 10,
+        top: 10,
+    },
+    image4: {
+        width: screenWidth / 2 - 10,
+        height: (screenWidth / 2 - 10) * 3 / 4,
+        borderRadius: theme.raduis.large,
+        position: 'absolute',
+        left: 10,
+        top: 10,
+    }
+})
+
+
+export const ScrollableRowList = (props) => {
+    const [loadingImage, setLoadingImage] = useState([])
+
     const [data, setData] = useState([])
     useDataFetching(props.urlItems, setData)
     const [setLoadingItems, animatedStyle] = useLoadingAnim();
 
     return (
         <>
-            <Animated.View style={[{ ...stylesCategoriaclList.container, backgroundColor: props.backColor }, animatedStyle]}>
+            <Animated.View style={[{ ...stylesScrollableRowList.container, backgroundColor: props.backColor }, animatedStyle]}>
 
                 <ScrollView horizontal={true} style={{ height: '100%' }} showsHorizontalScrollIndicator={false}>
-                    <View style={stylesCategoriaclList.titleItem}>
+                    <View style={stylesScrollableRowList.titleItem}>
                         {props.hadleTitleView}
-                        <Image source={{ uri: props.imageuri }} style={stylesCategoriaclList.titleItem.imageTitle} />
-                        <TouchableOpacity style={stylesCategoriaclList.titleItem.btn}>
+                        <Image source={{ uri: props.imageuri }} style={stylesScrollableRowList.titleItem.imageTitle} />
+                        <TouchableOpacity style={stylesScrollableRowList.titleItem.btn}>
                             <Text style={{ color: 'white' }}>See All</Text>
                             <MaterialIcon name="arrow-right" size={25} color="white" />
                         </TouchableOpacity>
                     </View>
                     {
                         data.map((item, index) =>
-                            <CategoricalItem
+                            <ScrollableRowItem
                                 key={index}
                                 item={{ ...item, recDays: 1 }}
                                 index={index}
@@ -178,11 +309,11 @@ export const HomeScreenCategoriaclList = (props) => {
                         )
                     }
                     {data.length >= 6 &&
-                        <View style={stylesCategoriaclList.itemView}>
-                            <View style={stylesCategoriaclList.itemViewSeeMore}>
+                        <View style={stylesScrollableRowList.itemView}>
+                            <View style={stylesScrollableRowList.itemViewSeeMore}>
 
                                 <Icon name="arrow-alt-circle-right" size={50} color={theme.colors.primary} />
-                                <Text style={stylesCategoriaclList.itemViewSeeMore.btn}>See All</Text>
+                                <Text style={stylesScrollableRowList.itemViewSeeMore.btn}>See All</Text>
                             </View>
                         </View>
                     }
@@ -194,18 +325,35 @@ export const HomeScreenCategoriaclList = (props) => {
 }
 
 
-const CategoricalItem = ({ item, setLoadingImage, index }) => {
+const ScrollableRowItem = ({ item, setLoadingImage, index }) => {
+    const handleLoadStart = (index) => {
+        setLoadingImage(prevState => {
+            let newState = [...prevState];
+            newState[index] = false;
+            return newState;
+        });
+    };
+
+    const handleLoad = (index) => {
+        setLoadingImage(prevState => {
+            let newState = [...prevState];
+            newState[index] = true;
+            return newState;
+        });
+    };
+
     return (
-        <TouchableOpacity style={stylesCategoriaclList.itemView} activeOpacity={1}>
+        <TouchableOpacity style={stylesScrollableRowList.itemView} activeOpacity={1}>
             <View>
                 <Image
                     source={{ uri: item.image[0].image }}
-                    style={stylesCategoriaclList.imageItem}
-                    onLoadStart={() => handleLoadStart(index, setLoadingImage)}
-                    onLoad={() => handleLoad(index, setLoadingImage)} />
+                    style={stylesScrollableRowList.imageItem}
+                    onLoadStart={() => handleLoadStart(index)}
+                    onLoad={() => handleLoad(index)} />
+
 
                 <Text
-                    style={stylesCategoriaclList.titleTextItem}
+                    style={stylesScrollableRowList.titleTextItem}
                     numberOfLines={2}
                     ellipsizeMode="tail">
                     {item.title}
@@ -228,11 +376,13 @@ const CategoricalItem = ({ item, setLoadingImage, index }) => {
 
             <View>
 
+
                 <ShowPrice price={item.price} discount={item.discount} />
             </View>
         </TouchableOpacity>
     )
 }
+
 
 
 const ShowPrice = ({ price, discount }) => (
@@ -261,7 +411,7 @@ const ShowPrice = ({ price, discount }) => (
     </View>
 )
 
-const stylesCategoriaclList = StyleSheet.create({
+const stylesScrollableRowList = StyleSheet.create({
     //Styles for own list
     container: {
         width: screenWidth,
@@ -414,7 +564,8 @@ const stylesCategoryCom = StyleSheet.create({
     }
 })
 
-export const RecentProductView = (props) => {
+
+export const GridProductView = (props) => {
     const itemsPerLine = 3;
     const maxHeight = 3;
     const [setLoadingItems, animatedStyle] = useLoadingAnim();
@@ -422,19 +573,18 @@ export const RecentProductView = (props) => {
     const [data, setData] = useState([])
     useDataFetching(props.url, setData);
     return (
-
-        <Animated.View style={[stylesRecentView.container, animatedStyle]} >
-            <Text style={stylesRecentView.titleText}>{props.title}{"\n"}
-                <Text style={stylesRecentView.subText}>{props.subtitle}</Text>
+        <Animated.View style={stylesGridProductView.container} >
+            <Text style={stylesGridProductView.titleText}>{props.title}{"\n"}
+                <Text style={stylesGridProductView.subText}>{props.subTitle}</Text>
             </Text>
 
 
 
             {[...Array((maxHeight > Math.ceil(data.length / itemsPerLine) ? Math.ceil(data.length / itemsPerLine) : maxHeight))].map((_, rowIndex) => (
-                <View key={rowIndex} style={stylesRecentView.rowContainer}>
+                <View key={rowIndex} style={stylesGridProductView.rowContainer}>
                     {
                         data.slice(rowIndex * itemsPerLine, (rowIndex + 1) * itemsPerLine).map((item, pos) => (
-                            <View style={{
+                            <View key={item.id} style={{
                                 borderBottomWidth: (rowIndex == (maxHeight - 1) ? 0 : 1),
                                 borderRightWidth: (pos == (itemsPerLine - 1) ? 0 : 1),
                                 borderColor: '#ECEFF1'
@@ -444,9 +594,9 @@ export const RecentProductView = (props) => {
                                 <TouchableOpacity activeOpacity={0.85}>
 
                                     <Image
-                                        key={item.id}
+
                                         source={{ uri: item.image[0].image }}
-                                        style={stylesRecentView.imageView}
+                                        style={stylesGridProductView.imageView}
                                         onLoad={() => handleLoad(pos, setLoadingItems)}
                                         onLoadStart={() => handleLoadStart(pos, setLoadingItems)}
                                     />
@@ -464,7 +614,7 @@ export const RecentProductView = (props) => {
     )
 }
 
-const stylesRecentView = StyleSheet.create({
+const stylesGridProductView = StyleSheet.create({
     container: {
         width: screenWidth,
         height: 445,
@@ -499,6 +649,8 @@ const stylesRecentView = StyleSheet.create({
 })
 
 export const MostProductsView = (props) => {
+
+
     const numberOfShow = 6
     const [data, setData] = useState([])
     useDataFetching(props.uri, setData)
@@ -514,6 +666,7 @@ export const MostProductsView = (props) => {
                             key={index}
                             item={{ ...item, recDays: 1 }}
                             index={index}
+
                             onLoad={() => handleLoad(index, setLoadingItems)}
                             onLoadStart={() => handleLoadStart(index, setLoadingItems)}
 
@@ -529,6 +682,7 @@ export const MostProductsView = (props) => {
                             <Text style={{}}>See All</Text>
                         </View>
                     </TouchableOpacity>
+
                 }
             </ScrollView>
 
@@ -539,6 +693,7 @@ export const MostProductsView = (props) => {
 const MostProductsItem = (props) => {
 
     return (
+
         <TouchableOpacity style={stylesMostProductsView.item} activeOpacity={0.88}>
             <Image source={{ uri: props.item.image[0].image }} onLoad={props.onLoad} onLoadStart={props.onLoadStart} style={stylesMostProductsView.item.image} />
             <Text style={stylesMostProductsView.item.text} numberOfLines={2}>{props.item.title}</Text>
@@ -565,7 +720,7 @@ const stylesMostProductsView = StyleSheet.create({
 
     container: {
         width: screenWidth,
-        height: 400,
+       height: 400,
         paddingTop: theme.spacing.large,
         justifyContent: 'center',
         alignItems: 'center'
@@ -580,6 +735,7 @@ const stylesMostProductsView = StyleSheet.create({
         lineHeight: 26,
     },
     item: {
+
         height: 330,
         width: 180,
         borderRightWidth: 1,
@@ -607,7 +763,7 @@ const stylesMostProductsView = StyleSheet.create({
 
 export const componentsHeight = {
     CategoryCom: stylesCategoryCom.container.height,
-    HomeScreenCategoriaclList: stylesCategoriaclList.container.height,
-    RecentProductView: stylesRecentView.container.height,
+    HomeScreenCategoriaclList: stylesScrollableRowList.container.height,
+    RecentProductView: stylesGridProductView.container.height,
     MostProductsView: stylesMostProductsView.container.height
 }
