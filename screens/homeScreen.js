@@ -66,13 +66,6 @@ export default function HomeScreen() {
     );
 
 
-
-    const RenderParent = ({ item }) => (
-        <View style={{ height: item.height }}>
-            <item.Comp />
-        </View>
-    )
-
     return (
         <View style={styles.container} >
             <SearchBarHome />
