@@ -5,6 +5,8 @@ import { ScrollView } from "react-native-gesture-handler";
 import theme from "../theme";
 import { useEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useDataFetching } from "../utils";
+import LoadingScreen from "./loadingScreen";
 const screenWidth = Dimensions.get('window').width;
 
 
@@ -23,12 +25,14 @@ const imageHeaderData = [
     { id: 4, image: "https://dkstatics-public.digikala.com/digikala-adservice-banners/d31a80d2ea931f08317b726b74cf417ffe0c2a6f_1688478968.jpg?x-oss-process=image/quality,q_95/format,webp" },
 ]
 export default function HomeScreen() {
-
+    const [init, setInit] = useState(true)
+    
     const homeScreenComponents = [
 
-        { Comp: () => <CategoryCom urlItems="https://mdi80nz.pythonanywhere.com/api/get-categories/" />, height: componentsHeight.CategoryCom, key: 2 },
+        { Comp: (setLoadComp) => <CategoryCom urlItems="https://mdi80nz.pythonanywhere.com/api/get-categories/" setLoadComp />, height: componentsHeight.CategoryCom, key: 2 },
         {
-            Comp: () => <ScrollableRowList
+            Comp: (setLoadComp) => <ScrollableRowList
+                setLoadComp
                 hadleTitleView={<TitleViewScrollableList />}
                 imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
                 urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=1"
@@ -64,27 +68,39 @@ export default function HomeScreen() {
         [{ nativeEvent: { contentOffset: { y: scrollY } } }],
         { useNativeDriver: false }
     );
+    const preloadImages = async (images) => {
+        const imageSources = images
+        const imagePromises = imageSources.map((source) => {
+            return Image.prefetch(source);
+        });
 
+        await Promise.all(imagePromises);
+    };
 
     return (
-        <View style={styles.container} >
-            <SearchBarHome />
-            <HeaderComponent scrollY={scrollY} scrollSnap={scrollSnap} data={imageHeaderData} />
 
-            <ScrollView
-                onScroll={handleScroll}
-                contentContainerStyle={{ paddingTop: 300 }}
-                scrollEventThrottle={32}
-                snapToOffsets={[0, scrollSnap + 50]}
-                decelerationRate="normal"
-                snapToEnd={false}>
-                {homeScreenComponents.map((item, index) => (
-                    <item.Comp key={index} />
-                ))}
-            </ScrollView>
+        <>
+            {init &&
+                <LoadingScreen style={{ flex: 1 }} />
+            }
+            <View style={styles.container} >
+                <SearchBarHome />
+                <HeaderComponent scrollY={scrollY} scrollSnap={scrollSnap} data={imageHeaderData} />
 
-            <StatusBar style="auto" />
-        </View>
+                <ScrollView
+                    onScroll={handleScroll}
+                    contentContainerStyle={{ paddingTop: 300 }}
+                    scrollEventThrottle={32}
+                    snapToOffsets={[0, scrollSnap + 50]}
+                    decelerationRate="normal"
+                    snapToEnd={false}>
+                    {homeScreenComponents.map((item, index) => (
+                        <item.Comp key={index} />
+                    ))}
+                </ScrollView>
+
+            </View>
+        </>
     )
 }
 

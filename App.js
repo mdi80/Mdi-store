@@ -15,7 +15,8 @@ import HomeScreen, { HomeHeader } from './screens/homeScreen';
 import ErrorScreen from './screens/errorScreen';
 import { setError } from './reducers/appReducer';
 import theme from './theme';
-import ProductScreen from './screens/product';
+import ProductScreen from './screens/productScreen';
+import LoadingScreen from './screens/loadingScreen';
 
 const Stack = createStackNavigator()
 
@@ -89,6 +90,7 @@ function AppContainer() {
 
             :
             <>
+
               <Stack.Screen name="Home" component={HomeScreen} options={{
                 headerShown: false
               }} />
@@ -96,7 +98,6 @@ function AppContainer() {
               <Stack.Screen name="Product" component={ProductScreen} options={{
                 headerShown: false
               }} />
-
             </>
           }
 

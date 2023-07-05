@@ -24,6 +24,7 @@
     "react-native": "0.71.8",
     "react-native-basic-carousel": "^1.0.9",
     "react-native-gesture-handler": "~2.9.0",
+    "react-native-indicators": "^0.17.0",
     "react-native-linear-gradient": "^2.7.2",
     "react-native-reanimated": "~2.14.4",
     "react-native-redash": "^18.1.0",

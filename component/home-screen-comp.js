@@ -351,7 +351,7 @@ const ScrollableRowItem = ({ item, setLoadingImage, index }) => {
 
     const navigation = useNavigation()
     return (
-        <TouchableOpacity style={stylesScrollableRowList.itemView} activeOpacity={0.9} onPress={() => { navigation.navigate('Product', { product: item }) }}>
+        <TouchableOpacity style={stylesScrollableRowList.itemView} activeOpacity={0.9} onPress={() => { navigation.navigate('LoadingScreen', { screen: 'Product', data: { product: item } }) }}>
             <View>
                 <Image
                     source={{ uri: item.image[0].image }}
@@ -507,11 +507,11 @@ const stylesScrollableRowList = StyleSheet.create({
 })
 
 ////// Start of second component
-export const CategoryCom = (prop) => {
+export const CategoryCom = ({ setLoadingItems }) => {
     const itemsPerLine = 3;
     const [data, setData] = useState([])
-    useDataFetching(prop.urlItems, setData)
-    const [setLoadingItems, animatedStyle] = useLoadingAnim();
+    // useDataFetching(prop.urlItems, setData)
+    // const [setLoadingItems, animatedStyle] = useLoadingAnim();
 
 
     return (
@@ -772,7 +772,7 @@ const stylesMostProductsView = StyleSheet.create({
 
 export const componentsHeight = {
     CategoryCom: stylesCategoryCom.container.height,
-    HomeScreenCategoriaclList: stylesScrollableRowList.container.height,
+    stylesScrollableRowList: stylesScrollableRowList.container.height,
     RecentProductView: stylesGridProductView.container.height,
     MostProductsView: stylesMostProductsView.container.height
 }
