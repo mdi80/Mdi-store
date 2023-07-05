@@ -14,6 +14,8 @@ import Animated, {
 
 import theme from "../theme";
 import { handleLoad, handleLoadStart, useDataFetching, useLoadingAnim } from "../utils";
+import { handleToProductPage } from "../screens/product";
+import { useNavigation } from "@react-navigation/native";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -290,6 +292,7 @@ export const ScrollableRowList = (props) => {
     useDataFetching(props.urlItems, setData)
     const [setLoadingItems, animatedStyle] = useLoadingAnim();
 
+
     return (
         <>
             <Animated.View style={[{ ...stylesScrollableRowList.container, backgroundColor: props.backColor }, animatedStyle]}>
@@ -329,6 +332,7 @@ export const ScrollableRowList = (props) => {
 }
 
 
+
 const ScrollableRowItem = ({ item, setLoadingImage, index }) => {
     const handleLoadStart = (index) => {
         setLoadingImage(prevState => {
@@ -346,8 +350,9 @@ const ScrollableRowItem = ({ item, setLoadingImage, index }) => {
         });
     };
 
+    const navigation = useNavigation()
     return (
-        <TouchableOpacity style={stylesScrollableRowList.itemView} activeOpacity={1}>
+        <TouchableOpacity style={stylesCategoriaclList.itemView} activeOpacity={0.9} onPress={() => { handleToProductPage(item, navigation); console.log('clicked'); }}>
             <View>
                 <Image
                     source={{ uri: item.image[0].image }}
@@ -386,6 +391,7 @@ const ScrollableRowItem = ({ item, setLoadingImage, index }) => {
         </TouchableOpacity>
     )
 }
+
 
 
 
@@ -771,3 +777,4 @@ export const componentsHeight = {
     RecentProductView: stylesGridProductView.container.height,
     MostProductsView: stylesMostProductsView.container.height
 }
+
