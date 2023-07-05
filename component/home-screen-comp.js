@@ -14,7 +14,6 @@ import Animated, {
 
 import theme from "../theme";
 import { handleLoad, handleLoadStart, useDataFetching, useLoadingAnim } from "../utils";
-import { handleToProductPage } from "../screens/product";
 import { useNavigation } from "@react-navigation/native";
 
 const screenWidth = Dimensions.get('window').width;
@@ -88,7 +87,7 @@ export const SearchBarHome = (props) => {
                     </TouchableOpacity>
                 </View>
             ) : (
-                <View style={{ height: '100%' }}>
+                <View style={{ width: "100%", height: '100%', position: 'absolute', zIndex: 4 }}>
                     <SearchOpen setSearchFouc={setSearchFouc} />
 
                 </View>
@@ -104,7 +103,6 @@ const stylesSearchbar = StyleSheet.create({
         height: 100,
         borderBottomColor: 'gray',
         backgroundColor: 'white',
-        position: 'absolute',
         width: '100%',
         text: {
             color: '#777',
@@ -155,6 +153,8 @@ export const HeaderComponent = (props) => {
     const handleImageSelect = (imageId) => {
         //TODO go to related page
     }
+
+
 
 
 
@@ -210,37 +210,36 @@ export const HeaderComponent = (props) => {
 
 
     return (
-        <AnimReact.View style={{ elevation, zIndex: 3 }}>
-            <SearchBarHome />
+        // <AnimReact.View style={{ elevation, zIndex: 3, position: 'absolute', }}>
 
-            <AnimReact.View style={{ height: animatedHeightContainer, zIndex: 2, position: 'absolute', top: 100, width: compWidth, backgroundColor: 'white' }}>
+        <AnimReact.View style={{ height: animatedHeightContainer, zIndex: 3, top: 100, width: compWidth, position: 'absolute', backgroundColor: 'white', elevation }}>
 
-                <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', height: animatedHeight1, left: padding, borderRadius: animatCor }}>
-                    <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[0].id)}>
+            <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', height: animatedHeight1, left: padding, borderRadius: animatCor }}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[0].id)}>
 
-                        <Image source={{ uri: props.data[0].image }} style={{ ...stylesHeaderComp.image, zIndex: 0, width: '100%', height: "100%", resizeMode: 'contain' }} />
-                    </TouchableOpacity>
-                </AnimReact.View>
-                <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', height: animatedHeight1, right: padding, borderRadius: animatCor }}>
-                    <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[1].id)}>
+                    <Image source={{ uri: props.data[0].image }} style={{ ...stylesHeaderComp.image, zIndex: 0, width: '100%', height: "100%", resizeMode: 'contain' }} />
+                </TouchableOpacity>
+            </AnimReact.View>
+            <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', height: animatedHeight1, right: padding, borderRadius: animatCor }}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[1].id)}>
 
-                        <Image source={{ uri: props.data[1].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%", resizeMode: 'contain' }} />
+                    <Image source={{ uri: props.data[1].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%", resizeMode: 'contain' }} />
 
-                    </TouchableOpacity>
-                </AnimReact.View>
-                <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', top: animatedposY3, height: animatedHeight1, left: animatedposX34, borderRadius: animatCor }}>
-                    <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[2].id)}>
+                </TouchableOpacity>
+            </AnimReact.View>
+            <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', top: animatedposY3, height: animatedHeight1, left: animatedposX34, borderRadius: animatCor }}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[2].id)}>
 
-                        <Image source={{ uri: props.data[2].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
-                    </TouchableOpacity>
-                </AnimReact.View>
-                <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', right: animatedposX34, height: animatedHeight1, top: animatedposY3, borderRadius: animatCor }}>
-                    <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[3].id)}>
-                        <Image source={{ uri: props.data[3].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
-                    </TouchableOpacity>
-                </AnimReact.View>
-            </AnimReact.View >
-        </AnimReact.View>
+                    <Image source={{ uri: props.data[2].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
+                </TouchableOpacity>
+            </AnimReact.View>
+            <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', right: animatedposX34, height: animatedHeight1, top: animatedposY3, borderRadius: animatCor }}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[3].id)}>
+                    <Image source={{ uri: props.data[3].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
+                </TouchableOpacity>
+            </AnimReact.View>
+        </AnimReact.View >
+        // </AnimReact.View>
     )
 }
 
@@ -352,7 +351,7 @@ const ScrollableRowItem = ({ item, setLoadingImage, index }) => {
 
     const navigation = useNavigation()
     return (
-        <TouchableOpacity style={stylesCategoriaclList.itemView} activeOpacity={0.9} onPress={() => { handleToProductPage(item, navigation); console.log('clicked'); }}>
+        <TouchableOpacity style={stylesScrollableRowList.itemView} activeOpacity={0.9} onPress={() => { navigation.navigate('Product', { product: item }) }}>
             <View>
                 <Image
                     source={{ uri: item.image[0].image }}

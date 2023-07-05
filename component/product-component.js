@@ -9,7 +9,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useDataFetching } from '../utils';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
-import { ShowPrice } from './home-screen-comp';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;

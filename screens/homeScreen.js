@@ -75,24 +75,12 @@ export default function HomeScreen() {
 
     return (
         <View style={styles.container} >
+            <SearchBarHome />
             <HeaderComponent scrollY={scrollY} scrollSnap={scrollSnap} data={imageHeaderData} />
-            {/* <FlatList
-                data={homeScreenComponents}
-                renderItem={({ item }) => <RenderParent item={item} />}
-                keyExtractor={(item) => item.key}
-                onScroll={handleScroll}
-                onScrollBeginDrag={handleScroll}
-                onScrollEndDrag={handleScroll}
-                contentContainerStyle={{ paddingTop: 400 }}
-                scrollEventThrottle={32}
-                snapToOffsets={[0, scrollSnap + 50]}
-                decelerationRate="normal"
-                snapToEnd={false}
-            /> */}
 
             <ScrollView
                 onScroll={handleScroll}
-                contentContainerStyle={{ paddingTop: 400 }}
+                contentContainerStyle={{ paddingTop: 300 }}
                 scrollEventThrottle={32}
                 snapToOffsets={[0, scrollSnap + 50]}
                 decelerationRate="normal"

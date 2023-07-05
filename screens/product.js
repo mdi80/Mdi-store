@@ -7,10 +7,7 @@ import { FlatList } from 'react-native-gesture-handler'
 import { MostProductsView } from '../component/home-screen-comp'
 
 
-export const handleToProductPage = (product, navigation) => {
 
-    navigation.navigate('Product', { product })
-}
 
 
 export default function ProductScreen({ navigation, route }) {
