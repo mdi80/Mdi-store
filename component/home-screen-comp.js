@@ -13,7 +13,7 @@ import Animated, {
 
 
 import theme from "../theme";
-import { useDataFetching } from "../utils";
+import { handleLoad, handleLoadStart, useDataFetching, useLoadingAnim } from "../utils";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -143,6 +143,7 @@ const stylesSearchbar = StyleSheet.create({
         }
     }
 })
+
 
 
 
@@ -280,40 +281,10 @@ export const stylesHeaderComp = StyleSheet.create({
 
 export const ScrollableRowList = (props) => {
     const [loadingImage, setLoadingImage] = useState([])
+
     const [data, setData] = useState([])
     useDataFetching(props.urlItems, setData)
-
-    // Handle Animations of component
-    const comOpacity = useSharedValue(0); // Initial opacity value
-    const animateComponent = () => {
-        comOpacity.value = withTiming(1, { duration: 400 }); // Fade-in animation with a duration of 1000ms
-    };
-
-    const animatedStyle = useAnimatedStyle(() => {
-        return {
-            opacity: comOpacity.value, // Apply the animated opacity value to the component
-        };
-    });
-
-
-    useEffect(() => {
-        allImageLoaded()
-    }, [loadingImage])
-
-
-    const allImageLoaded = () => {
-        let bool = true;
-        if (loadingImage.length == 0) return false;
-        loadingImage.forEach(i => {
-            if (!i) bool = false;
-        });
-
-        if (bool) {
-            animateComponent()
-        }
-        return bool
-    }
-
+    const [setLoadingItems, animatedStyle] = useLoadingAnim();
 
     return (
         <>
@@ -334,7 +305,7 @@ export const ScrollableRowList = (props) => {
                                 key={index}
                                 item={{ ...item, recDays: 1 }}
                                 index={index}
-                                setLoadingImage={setLoadingImage} />
+                                setLoadingImage={setLoadingItems} />
                         )
                     }
                     {data.length >= 6 &&
@@ -353,6 +324,7 @@ export const ScrollableRowList = (props) => {
     )
 }
 
+
 const ScrollableRowItem = ({ item, setLoadingImage, index }) => {
     const handleLoadStart = (index) => {
         setLoadingImage(prevState => {
@@ -369,6 +341,7 @@ const ScrollableRowItem = ({ item, setLoadingImage, index }) => {
             return newState;
         });
     };
+
     return (
         <TouchableOpacity style={stylesScrollableRowList.itemView} activeOpacity={1}>
             <View>
@@ -377,6 +350,7 @@ const ScrollableRowItem = ({ item, setLoadingImage, index }) => {
                     style={stylesScrollableRowList.imageItem}
                     onLoadStart={() => handleLoadStart(index)}
                     onLoad={() => handleLoad(index)} />
+
 
                 <Text
                     style={stylesScrollableRowList.titleTextItem}
@@ -402,31 +376,40 @@ const ScrollableRowItem = ({ item, setLoadingImage, index }) => {
 
             <View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
-                    <View>
-                        <Text
-                            style={stylesScrollableRowList.textPriceItem}
-                            ellipsizeMode="tail">
-                            {parseFloat(item.price - item.discount) + " $"}
-                        </Text>
-                        <Text
-                            style={stylesScrollableRowList.textPrimaryPriceItem}
-                            ellipsizeMode="tail">{parseFloat(item.price)} $</Text>
-                    </View>
-                    <View>
-
-                        <Text
-                            style={stylesScrollableRowList.textDiscountPricePerItem}>
-                            {parseInt(100 * (item.discount / item.price))}%
-                        </Text>
-                    </View>
-                </View>
-
+                <ShowPrice price={item.price} discount={item.discount} />
             </View>
         </TouchableOpacity>
     )
 }
+
+
+
+const ShowPrice = ({ price, discount }) => (
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
+
+        <View>
+            <Text
+                style={stylesCategoriaclList.textPriceItem}
+                ellipsizeMode="tail">
+                {parseFloat(price - discount) + " $"}
+            </Text>
+            {discount != 0 &&
+                <Text
+                    style={stylesCategoriaclList.textPrimaryPriceItem}
+                    ellipsizeMode="tail">{parseFloat(price)} $</Text>
+            }
+        </View>
+        <View>
+            {discount != 0 &&
+                <Text
+                    style={stylesCategoriaclList.textDiscountPricePerItem}>
+                    {(parseInt(100 * (discount / price)) == 0 ? 1 : parseInt(100 * (discount / price)))}%
+                </Text>
+            }
+        </View>
+    </View>
+)
 
 const stylesScrollableRowList = StyleSheet.create({
     //Styles for own list
@@ -506,7 +489,7 @@ const stylesScrollableRowList = StyleSheet.create({
     textDiscountPricePerItem: {
         paddingLeft: theme.spacing.small,
         paddingRight: theme.spacing.small,
-        padding: theme.spacing.small,
+        padding: 3,
         color: 'white',
         fontWeight: 'bold',
         backgroundColor: theme.colors.primary,
@@ -514,27 +497,28 @@ const stylesScrollableRowList = StyleSheet.create({
     }
 })
 
-
+////// Start of second component
 export const CategoryCom = (prop) => {
     const itemsPerLine = 3;
     const [data, setData] = useState([])
     useDataFetching(prop.urlItems, setData)
+    const [setLoadingItems, animatedStyle] = useLoadingAnim();
 
 
     return (
-        <View style={{ ...stylesCategoryCom.container, height: 315 }}>
+        <Animated.View style={[stylesCategoryCom.container, animatedStyle]}>
             <Text style={{
                 justifyContent: 'center', alignSelf: 'center', fontSize: 1.5 * theme.typography.fontSize.header, fontWeight: 600, fontFamily: theme.typography.fontFamily
             }}>Categories</Text>
             {[...Array(Math.ceil(data.length / itemsPerLine))].map((_, rowIndex) => (
                 <View key={rowIndex} style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    {data.slice(rowIndex * itemsPerLine, (rowIndex + 1) * itemsPerLine).map(item => (
-                        <ImageButton key={item.id} src={{ uri: item.image }} title={item.title} />
+                    {data.slice(rowIndex * itemsPerLine, (rowIndex + 1) * itemsPerLine).map((item, index) => (
+                        <ImageButton key={item.id} src={{ uri: item.image }} title={item.title} index={index} setLoadingItems={setLoadingItems} />
                     ))}
                 </View>
             ))}
 
-        </View>
+        </Animated.View>
     )
 }
 export const ImageButton = (props) => {
@@ -542,7 +526,11 @@ export const ImageButton = (props) => {
 
     return (
         <TouchableOpacity style={{ ...props.style, ...stylesCategoryCom.imageButton.container }} activeOpacity={0.7} >
-            <Image source={props.src} style={stylesCategoryCom.imageButton.image} onError={() => dispatch(setError({ networkError: true }))} />
+            <Image
+                onLoadStart={() => handleLoadStart(props.index, props.setLoadingItems)}
+                onLoad={() => handleLoad(props.index, props.setLoadingItems)}
+                source={props.src} style={stylesCategoryCom.imageButton.image}
+                onError={() => dispatch(setError({ networkError: true }))} />
             <Text style={stylesCategoryCom.imageButton.text}>{props.title}</Text>
         </TouchableOpacity>
     )
@@ -551,6 +539,7 @@ export const ImageButton = (props) => {
 const stylesCategoryCom = StyleSheet.create({
     container: {
         width: screenWidth,
+        height: 315,
         justifyContent: 'space-between',
         padding: theme.spacing.medium,
     },
@@ -579,11 +568,12 @@ const stylesCategoryCom = StyleSheet.create({
 export const GridProductView = (props) => {
     const itemsPerLine = 3;
     const maxHeight = 3;
+    const [setLoadingItems, animatedStyle] = useLoadingAnim();
 
     const [data, setData] = useState([])
     useDataFetching(props.url, setData);
     return (
-        <View style={stylesGridProductView.container} >
+        <Animated.View style={stylesGridProductView.container} >
             <Text style={stylesGridProductView.titleText}>{props.title}{"\n"}
                 <Text style={stylesGridProductView.subText}>{props.subTitle}</Text>
             </Text>
@@ -599,7 +589,7 @@ export const GridProductView = (props) => {
                                 borderRightWidth: (pos == (itemsPerLine - 1) ? 0 : 1),
                                 borderColor: '#ECEFF1'
                             }}
-
+                                key={pos}
                             >
                                 <TouchableOpacity activeOpacity={0.85}>
 
@@ -607,7 +597,10 @@ export const GridProductView = (props) => {
 
                                         source={{ uri: item.image[0].image }}
                                         style={stylesGridProductView.imageView}
+                                        onLoad={() => handleLoad(pos, setLoadingItems)}
+                                        onLoadStart={() => handleLoadStart(pos, setLoadingItems)}
                                     />
+
                                 </TouchableOpacity>
                             </View>
                         ))
@@ -617,7 +610,7 @@ export const GridProductView = (props) => {
 
 
             }
-        </View >
+        </Animated.View >
     )
 }
 
@@ -629,6 +622,7 @@ const stylesGridProductView = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+
     rowContainer: {
         flexDirection: 'row',
     },
@@ -656,30 +650,39 @@ const stylesGridProductView = StyleSheet.create({
 
 export const MostProductsView = (props) => {
 
+
+    const numberOfShow = 6
     const [data, setData] = useState([])
     useDataFetching(props.uri, setData)
+    const [setLoadingItems, animatedStyle] = useLoadingAnim();
 
     return (
         <View style={stylesMostProductsView.container}>
             <Text style={stylesMostProductsView.titleText}>{props.title}</Text>
             <ScrollView horizontal={true} style={{ height: '100%' }} showsHorizontalScrollIndicator={false}>
                 {
-                    data.map((item, index) =>
+                    data.slice(0, (numberOfShow <= data.length ? numberOfShow : data.length)).map((item, index) =>
                         <MostProductsItem
                             key={index}
                             item={{ ...item, recDays: 1 }}
                             index={index}
+
+                            onLoad={() => handleLoad(index, setLoadingItems)}
+                            onLoadStart={() => handleLoadStart(index, setLoadingItems)}
+
                         />
+
                     )
                 }
-                {data.length >= 6 &&
-                    <View style={stylesScrollableRowList.itemView}>
-                        <View style={stylesScrollableRowList.itemViewSeeMore}>
+                {data.length >= numberOfShow &&
+                    <TouchableOpacity style={{ ...stylesMostProductsView.item, justifyContent: 'center' }} activeOpacity={0.88}>
+                        <View style={{ alignSelf: 'center' }}>
 
                             <Icon name="arrow-alt-circle-right" size={50} color={theme.colors.primary} />
-                            <Text style={stylesScrollableRowList.itemViewSeeMore.btn}>See All</Text>
+                            <Text style={{}}>See All</Text>
                         </View>
-                    </View>
+                    </TouchableOpacity>
+
                 }
             </ScrollView>
 
@@ -690,21 +693,34 @@ export const MostProductsView = (props) => {
 const MostProductsItem = (props) => {
 
     return (
-        <View style={stylesMostProductsView.item}>
-            <Image source={{ uri: props.item.image[0].image }} style={stylesMostProductsView.item.image} />
-            <Text style={stylesMostProductsView.item.text}>{props.item.title}</Text>
 
-        </View >
+        <TouchableOpacity style={stylesMostProductsView.item} activeOpacity={0.88}>
+            <Image source={{ uri: props.item.image[0].image }} onLoad={props.onLoad} onLoadStart={props.onLoadStart} style={stylesMostProductsView.item.image} />
+            <Text style={stylesMostProductsView.item.text} numberOfLines={2}>{props.item.title}</Text>
+            <View style={{ flexDirection: 'row' }}>
+                <Icon name="rocket" size={15} color={theme.colors.primary} />
+                {props.item.recDays == 1 ?
+                    <Text style={{ color: 'gray', marginLeft: 10 }}>
+                        Send tomorrow
+                    </Text>
+
+                    :
+                    <Text style={{ color: 'gray', marginLeft: 10 }}>
+                        Send in {props.item.recDays} days
+                    </Text>
+                }
+            </View>
+            <ShowPrice price={props.item.price} discount={props.item.discount} />
+        </TouchableOpacity >
 
     )
 }
-
-
 
 const stylesMostProductsView = StyleSheet.create({
 
     container: {
         width: screenWidth,
+       height: 400,
         paddingTop: theme.spacing.large,
         justifyContent: 'center',
         alignItems: 'center'
@@ -719,23 +735,35 @@ const stylesMostProductsView = StyleSheet.create({
         lineHeight: 26,
     },
     item: {
-        height: 300,
+
+        height: 330,
         width: 180,
         borderRightWidth: 1,
         borderColor: '#ECEFF1',
+        padding: theme.spacing.large,
+        justifyContent: 'space-between',
         image: {
-            marginTop: 20,
+            // marginTop: 20,
             width: 150,
             height: 150,
+            marginBottom: 2,
             alignSelf: 'center',
         },
         text: {
-            fontSize: theme.typography.fontSize.button + 2,
+            fontSize: theme.typography.fontSize.button,
             fontFamily: theme.typography.fontFamily,
-            marginLeft: 15,
+            // marginLeft: 15,
+            lineHeight: 20,
+            height: 40,
         },
     },
 })
 
 
 
+export const componentsHeight = {
+    CategoryCom: stylesCategoryCom.container.height,
+    HomeScreenCategoriaclList: stylesScrollableRowList.container.height,
+    RecentProductView: stylesGridProductView.container.height,
+    MostProductsView: stylesMostProductsView.container.height
+}
