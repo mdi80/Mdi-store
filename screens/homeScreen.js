@@ -1,9 +1,9 @@
 import { StatusBar } from "expo-status-bar";
-import { Image, StyleSheet, Text, View, Dimensions, Button, Animated, VirtualizedList} from "react-native";
-import { CategoryCom, GridProductView, ScrollableRowList, MostProductsView, SearchBarHome, HeaderComponent,componentsHeight } from "../component/home-screen-comp";
+import { Image, StyleSheet, Text, View, Dimensions, Button, Animated, VirtualizedList, FlatList } from "react-native";
+import { CategoryCom, GridProductView, ScrollableRowList, MostProductsView, SearchBarHome, HeaderComponent, componentsHeight } from "../component/home-screen-comp";
 import { ScrollView } from "react-native-gesture-handler";
 import theme from "../theme";
-import { useEffect,useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 const screenWidth = Dimensions.get('window').width;
 
@@ -25,12 +25,11 @@ const imageHeaderData = [
 export default function HomeScreen() {
 
     const homeScreenComponents = [
-        { Comp: () => <Image source={require('../assets/p1.png')} style={styles.bannerImage} />, height: styles.bannerImage.height, key: 1 },
 
         { Comp: () => <CategoryCom urlItems="https://mdi80nz.pythonanywhere.com/api/get-categories/" />, height: componentsHeight.CategoryCom, key: 2 },
         {
             Comp: () => <ScrollableRowList
-                hadleTitleView={<TitleViewCategoricalList />}
+                hadleTitleView={<TitleViewScrollableList />}
                 imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
                 urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=1"
                 backColor={theme.colors.primary}
@@ -44,7 +43,7 @@ export default function HomeScreen() {
 
         {
             Comp: () => <ScrollableRowList
-                hadleTitleView={<TitleViewCategoricalList />}
+                hadleTitleView={<TitleViewScrollableList />}
                 imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
                 urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4"
                 backColor={theme.colors.secondary}
@@ -52,14 +51,14 @@ export default function HomeScreen() {
 
             />, height: componentsHeight.ScrollableRowList, key: 6
         },
-        { Comp: ({ data }) => <RecentProductView data={data} url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4" title="Digital Product" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 7 },
-        { Comp: () => <GridProductView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=5" title="Top Sale" />, height: componentsHeight.GridProductView, key: 8 },
-        { Comp: () => <RecentProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Mobile" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 9 },
+        { Comp: ({ data }) => <GridProductView data={data} url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4" title="Digital Product" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 7 },
+        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=5" title="Top Sale" />, height: componentsHeight.GridProductView, key: 8 },
+        { Comp: () => <GridProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Mobile" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 9 },
     ]
 
 
     const scrollY = useRef(new Animated.Value(0)).current;
-    const scrollSnap = 250
+    const scrollSnap = 200
     const handleScroll = Animated.event(
         [{ nativeEvent: { contentOffset: { y: scrollY } } }],
         { useNativeDriver: false }
@@ -67,39 +66,40 @@ export default function HomeScreen() {
 
 
 
-    const RenderParent = ({ item }) => {
-        const [data, setdata] = useState("")
+    const RenderParent = ({ item }) => (
+        <View style={{ height: item.height }}>
+            <item.Comp />
+        </View>
+    )
 
-        useEffect(() => {
-            setdata("here")
-        })
-        return (
-            <View style={{ height: item.height }}>
-                <item.Comp data={data} />
-            </View>
-        )
-    }
-
-    const getComp = (data, index) => {
-        return data[index]
-    }
     return (
         <View style={styles.container} >
-            <SearchBarHome />
             <HeaderComponent scrollY={scrollY} scrollSnap={scrollSnap} data={imageHeaderData} />
-            <VirtualizedList
-                getItemCount={() => homeScreenComponents.length}
-                getItem={getComp}
+            {/* <FlatList
                 data={homeScreenComponents}
                 renderItem={({ item }) => <RenderParent item={item} />}
                 keyExtractor={(item) => item.key}
                 onScroll={handleScroll}
-                contentContainerStyle={{ paddingTop: 300 }}
-                scrollEventThrottle={16}
-                snapToOffsets={[0, scrollSnap]}
+                onScrollBeginDrag={handleScroll}
+                onScrollEndDrag={handleScroll}
+                contentContainerStyle={{ paddingTop: 400 }}
+                scrollEventThrottle={32}
+                snapToOffsets={[0, scrollSnap + 50]}
                 decelerationRate="normal"
                 snapToEnd={false}
-            />
+            /> */}
+
+            <ScrollView
+                onScroll={handleScroll}
+                contentContainerStyle={{ paddingTop: 400 }}
+                scrollEventThrottle={32}
+                snapToOffsets={[0, scrollSnap + 50]}
+                decelerationRate="normal"
+                snapToEnd={false}>
+                {homeScreenComponents.map((item, index) => (
+                    <item.Comp key={index} />
+                ))}
+            </ScrollView>
 
             <StatusBar style="auto" />
         </View>
