@@ -101,7 +101,6 @@ const stylesSearchbar = StyleSheet.create({
     searchBarRoot: {
         height: 100,
         borderBottomColor: 'gray',
-        elevation: 1,
         backgroundColor: 'white',
 
         text: {

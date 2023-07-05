@@ -18,32 +18,41 @@ const TitleViewScrollableList = () => (
 export default function HomeScreen() {
     const scrollY = useRef(new Animated.Value(0)).current;
 
-    const handleScroll = e => {
-        console.log(e.nativeEvent.contentOffset.y);
-        scrollY.setValue(e.nativeEvent.contentOffset.y)
-    };
+    const handleScroll = Animated.event(
+        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+        { useNativeDriver: false }
+    );
 
-    const inputRange = [0, 250]
+    const scrollSnap = 250
+
+    const inputRange = [0, scrollSnap]
+    const inputRange2 = [0, scrollSnap / 2, scrollSnap]
     const animatedHeight = scrollY.interpolate({
         inputRange: inputRange, // Adjust these values as per your requirements
         outputRange: [(screenWidth / 2 - 10) * 3 / 4, (screenWidth / 2 - 10) * 3 / 10], // Adjust these values as per your requirements
         extrapolate: 'clamp',
     });
-
-    const animatedWidth = scrollY.interpolate({
-        inputRange: inputRange, // Adjust these values as per your requirements
-        outputRange: [(screenWidth / 2 - 10), (screenWidth / 2 - 10) / 2.5], // Adjust these values as per your requirements
+    const animatedHeight1 = scrollY.interpolate({
+        inputRange: inputRange2, // Adjust these values as per your requirements
+        outputRange: [(screenWidth / 2 - 10) * 3 / 4, (screenWidth / 2 - 10) * 3 / 10, (screenWidth / 2 - 10) * 3 / 10], // Adjust these values as per your requirements
         extrapolate: 'clamp',
     });
 
-    const animatedposY2 = scrollY.interpolate({
-        inputRange: inputRange, // Adjust these values as per your requirements
-        outputRange: [(screenWidth / 2 - 10) + 5, 3 * (screenWidth / 2 - 10) / 2 + 2.5], // Adjust these values as per your requirements
+    const animatedHeight2 = scrollY.interpolate({
+        inputRange: inputRange2, // Adjust these values as per your requirements
+        outputRange: [(screenWidth / 2 - 10) * 3 / 4, (screenWidth / 2 - 10) * 3 / 4, (screenWidth / 2 - 10) * 3 / 10], // Adjust these values as per your requirements
         extrapolate: 'clamp',
     });
-    const animatedposX3 = scrollY.interpolate({
-        inputRange: inputRange, // Adjust these values as per your requirements
-        outputRange: [0, (screenWidth / 2 - 10) / 2 + 2.5], // Adjust these values as per your requirements
+
+
+    const animatedWidth1 = scrollY.interpolate({
+        inputRange: inputRange2, // Adjust these values as per your requirements
+        outputRange: [(screenWidth / 2 - 10), (screenWidth / 2 - 10) / 2.5, (screenWidth / 2 - 10) / 2.5], // Adjust these values as per your requirements
+        extrapolate: 'clamp',
+    });
+    const animatedposX34 = scrollY.interpolate({
+        inputRange: inputRange2, // Adjust these values as per your requirements
+        outputRange: [4, (screenWidth / 2 - 10) / 2 + 10, (screenWidth / 2 - 10) / 2 + 12.5], // Adjust these values as per your requirements
         extrapolate: 'clamp',
     });
     const animatedposY3 = scrollY.interpolate({
@@ -53,44 +62,42 @@ export default function HomeScreen() {
     });
     const animatedHeightContainer = scrollY.interpolate({
         inputRange: inputRange, // Adjust these values as per your requirements
-        outputRange: [(screenWidth / 2 - 10) * 3 / 2 + 10, (screenWidth / 2 - 10) * 3 / 8 + 5], // Adjust these values as per your requirements
+        outputRange: [(screenWidth / 2 - 10) * 3 / 2 + 10, (screenWidth / 2 - 10) * 3 / 8 ], // Adjust these values as per your requirements
         extrapolate: 'clamp',
     });
 
     const animatCor = scrollY.interpolate({
         inputRange: inputRange, // Adjust these values as per your requirements
-        outputRange: [theme.raduis.large, theme.raduis.large * 2], // Adjust these values as per your requirements
+        outputRange: [theme.raduis.large, theme.raduis.large * 1.5], // Adjust these values as per your requirements
         extrapolate: 'clamp',
     });
-
-    const animatedScrollHight = scrollY.interpolate({
+    const elevation = scrollY.interpolate({
         inputRange: inputRange, // Adjust these values as per your requirements
-        outputRange: [400, 0], // Adjust these values as per your requirements
+        outputRange: [0, 2], // Adjust these values as per your requirements
         extrapolate: 'clamp',
     });
-
     return (
         <View style={styles.container} >
             <SearchBarHome />
             {/* <HeaderComponent animated={animatedStyle} setPosY={setPosY} /> */}
 
 
-            <Animated.View style={{ height: animatedHeightContainer, zIndex: 2, position: 'absolute', top: 100 }}>
-                <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth, overflow: 'hidden', height: animatedHeight, borderRadius: animatCor }}>
+            <Animated.View style={{ height: animatedHeightContainer, zIndex: 2, position: 'absolute', top: 100, width: "100%", backgroundColor: 'white', elevation }}>
+                <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', height: animatedHeight1, left: 4, borderRadius: animatCor }}>
 
-                    <Image source={require("../assets/h1.webp")} style={{ ...stylesHeaderComp.image, zIndex: 0, width: '100%', height: "100%" }} />
+                    <Image source={require("../assets/h1.webp")} style={{ ...stylesHeaderComp.image, zIndex: 0, width: '100%', height: "100%", resizeMode: 'contain' }} />
                 </Animated.View>
-                <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth, overflow: 'hidden', height: animatedHeight, left: animatedposY2, borderRadius: animatCor }}>
-                    <Image source={require("../assets/h2.webp")} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
+                <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', height: animatedHeight1, right: 4, borderRadius: animatCor }}>
+                    <Image source={require("../assets/h2.webp")} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%", resizeMode: 'contain' }} />
                 </Animated.View>
-                <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth, overflow: 'hidden', top: animatedposY3, height: animatedHeight, left: animatedposX3, borderRadius: animatCor }}>
+                <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', top: animatedposY3, height: animatedHeight1, left: animatedposX34, borderRadius: animatCor }}>
                     <Image source={require("../assets/h3.webp")} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
                 </Animated.View>
-                <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth, overflow: 'hidden', left: (screenWidth / 2 - 10) + 5, height: animatedHeight, top: animatedposY3, borderRadius: animatCor }}>
+                <Animated.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', right: animatedposX34, height: animatedHeight1, top: animatedposY3, borderRadius: animatCor }}>
                     <Image source={require("../assets/h4.webp")} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
                 </Animated.View>
             </Animated.View >
-            <ScrollView onScroll={handleScroll} scrollEventThrottle={16} contentContainerStyle={{ paddingTop: 300 }} >
+            <ScrollView onScroll={handleScroll} scrollEventThrottle={16} contentContainerStyle={{ paddingTop: 300 }} snapToOffsets={[0, scrollSnap]} decelerationRate="normal" snapToEnd={false}>
 
                 {/* <Animated.View style={{ height: animatedScrollHight }}>
 
