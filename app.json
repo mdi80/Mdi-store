@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Mdi-Store",
-    "slug": "Mdi-Store",
+    "slug": "mdi-store",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/shop.png",
@@ -21,7 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.mdi80.mdistore"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -46,6 +47,12 @@
           }
         }
       }
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6778d921-12aa-430b-91ce-614110a187f2"
+      }
+    },
+    "owner": "mdi80"
   }
 }

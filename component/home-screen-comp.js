@@ -351,7 +351,7 @@ const ScrollableRowItem = ({ item, setLoadingImage, index }) => {
 
     const navigation = useNavigation()
     return (
-        <TouchableOpacity style={stylesScrollableRowList.itemView} activeOpacity={0.9} onPress={() => { navigation.navigate('Product', { product: item }) }}>
+        <TouchableOpacity style={stylesScrollableRowList.itemView} activeOpacity={1} onPress={() => { navigation.navigate('Product', { product: item }) }}>
             <View>
                 <Image
                     source={{ uri: item.image[0].image }}
