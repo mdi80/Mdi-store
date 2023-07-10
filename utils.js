@@ -28,14 +28,17 @@ export async function loadUserSession() {
 export const useDataFetching = (url, setData) => {
     const token = useSelector(state => state.auth.token)
     const dispatch = useDispatch()
+
+
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await fetch(url, {
                     method: 'GET',
-                    headers: {
-                        'Authorization': 'Token ' + token
-                    }
+                    // headers: {
+                    //     'Authorization': 'Token ' + token
+                    // }
                 });
                 if (!response.ok) {
                     throw new Error('Network response was not ok.');

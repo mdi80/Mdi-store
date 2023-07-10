@@ -1,10 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import { Image, StyleSheet, Text, View, Dimensions, Button, Animated, VirtualizedList, FlatList } from "react-native";
+import { Image, StyleSheet, Text, View, Dimensions, Button, VirtualizedList, FlatList } from "react-native";
 import { CategoryCom, GridProductView, ScrollableRowList, MostProductsView, SearchBarHome, HeaderComponent, componentsHeight } from "../component/home-screen-comp";
 import { ScrollView } from "react-native-gesture-handler";
 import theme from "../theme";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated";
 const screenWidth = Dimensions.get('window').width;
 
 
@@ -54,44 +55,27 @@ export default function HomeScreen() {
         { Comp: ({ data }) => <GridProductView data={data} url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4" title="Digital Product" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 7 },
         { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=5" title="Top Sale" />, height: componentsHeight.GridProductView, key: 8 },
         { Comp: () => <GridProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Mobile" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 9 },
+
     ]
 
 
-    const scrollY = useRef(new Animated.Value(0)).current;
+    const scrollY = useSharedValue(0);
     const scrollSnap = 200
-    const handleScroll = Animated.event(
-        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-        { useNativeDriver: false }
-    );
+    const handleScroll = useAnimatedScrollHandler({
+        onScroll: (event) => {
+            scrollY.value = event.contentOffset.y;
+        },
+    });
 
-
-
-    const RenderParent = ({ item }) => (
-        <View style={{ height: item.height }}>
-            <item.Comp />
-        </View>
-    )
 
     return (
         <View style={styles.container} >
+            <SearchBarHome />
             <HeaderComponent scrollY={scrollY} scrollSnap={scrollSnap} data={imageHeaderData} />
-            {/* <FlatList
-                data={homeScreenComponents}
-                renderItem={({ item }) => <RenderParent item={item} />}
-                keyExtractor={(item) => item.key}
-                onScroll={handleScroll}
-                onScrollBeginDrag={handleScroll}
-                onScrollEndDrag={handleScroll}
-                contentContainerStyle={{ paddingTop: 400 }}
-                scrollEventThrottle={32}
-                snapToOffsets={[0, scrollSnap + 50]}
-                decelerationRate="normal"
-                snapToEnd={false}
-            /> */}
 
-            <ScrollView
+            <Animated.ScrollView
                 onScroll={handleScroll}
-                contentContainerStyle={{ paddingTop: 400 }}
+                contentContainerStyle={{ paddingTop: 300 }}
                 scrollEventThrottle={32}
                 snapToOffsets={[0, scrollSnap + 50]}
                 decelerationRate="normal"
@@ -99,7 +83,7 @@ export default function HomeScreen() {
                 {homeScreenComponents.map((item, index) => (
                     <item.Comp key={index} />
                 ))}
-            </ScrollView>
+            </Animated.ScrollView>
 
             <StatusBar style="auto" />
         </View>
