@@ -1,13 +1,11 @@
-import { Component, useEffect, useRef, useState } from "react";
-import { Animated as AnimReact, BackHandler, Button, Dimensions, Image, Keyboard, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
+import { useEffect, useRef, useState } from "react";
+import { BackHandler, Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
 import { PanGestureHandler, ScrollView } from "react-native-gesture-handler";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setError } from "../reducers/appReducer";
 import Animated, {
-    useSharedValue,
-    withTiming,
     useAnimatedStyle,
     interpolate,
     Extrapolation,
@@ -169,51 +167,14 @@ export const HeaderComponent = (props) => {
 
     const scrollSnap = props.scrollSnap
 
-    const inputRange = [0, scrollSnap]
-    const inputRange2 = [0, scrollSnap / 2, scrollSnap]
+    const inputRange2Dim = [0, scrollSnap]
+    const inputRange3Dim = [0, scrollSnap / 2, scrollSnap]
 
-    // const animatedHeight1 = scrollY.interpolate({
-    //     inputRange: inputRange2,
-    //     outputRange: [itemWidth * 3 / 4, itemWidth * 3 / 10, itemWidth * 3 / 10],
-    //     extrapolate: 'clamp',
-    // });
-
-    // const animatedWidth1 = scrollY.interpolate({
-    //     inputRange: inputRange2,
-    //     outputRange: [itemWidth, itemWidth / 2.5, itemWidth / 2.5],
-    //     extrapolate: 'clamp',
-    // });
-    // const animatedposX34 = scrollY.interpolate({
-    //     inputRange: inputRange2,
-    //     outputRange: [padding, itemWidth / 2 + (padding * 3), itemWidth / 2 + (padding * 3)],
-    //     extrapolate: 'clamp',
-    // });
-    // const animatedposY3 = scrollY.interpolate({
-    //     inputRange: inputRange,
-    //     outputRange: [(3 * itemWidth / 4) + 5, 0],
-    //     extrapolate: 'clamp',
-    // });
-    // const animatedHeightContainer = scrollY.interpolate({
-    //     inputRange: inputRange,
-    //     outputRange: [itemWidth * 3 / 2 + 10, itemWidth * 3 / 8],
-    //     extrapolate: 'clamp',
-    // });
-
-    // const animatCor = scrollY.interpolate({
-    //     inputRange: inputRange,
-    //     outputRange: [theme.raduis.large, theme.raduis.large * 1.5],
-    //     extrapolate: 'clamp',
-    // });
-    // const elevation = scrollY.interpolate({
-    //     inputRange: inputRange,
-    //     outputRange: [0, 2],
-    //     extrapolate: 'clamp',
-    // });
 
 
     const animatedStyleContainer = useAnimatedStyle(() => {
-        const height = interpolate(scrollY.value, inputRange, [itemWidth * 3 / 2 + 10, itemWidth * 3 / 8], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
-        const elevation = interpolate(scrollY.value, inputRange, [0, 2], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+        const height = interpolate(scrollY.value, inputRange2Dim, [itemWidth * 3 / 2 + 10, itemWidth * 3 / 8], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+        const elevation = interpolate(scrollY.value, inputRange2Dim, [0, 2], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
         return {
             height,
             elevation
@@ -221,8 +182,8 @@ export const HeaderComponent = (props) => {
     });
 
     const animatedCompScale = useAnimatedStyle(() => {
-        const width = interpolate(scrollY.value, inputRange2, [itemWidth, itemWidth / 2.5, itemWidth / 2.5], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
-        const height = interpolate(scrollY.value, inputRange2, [itemWidth * 3 / 4, itemWidth * 3 / 10, itemWidth * 3 / 10], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+        const width = interpolate(scrollY.value, inputRange3Dim, [itemWidth, itemWidth / 2.5, itemWidth / 2.5], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+        const height = interpolate(scrollY.value, inputRange3Dim, [itemWidth * 3 / 4, itemWidth * 3 / 10, itemWidth * 3 / 10], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
 
         return {
 
@@ -232,7 +193,7 @@ export const HeaderComponent = (props) => {
     });
 
     const animatedCompRaduis = useAnimatedStyle(() => {
-        const borderRadius = interpolate(scrollY.value, inputRange, [theme.raduis.large, theme.raduis.large * 1.5], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+        const borderRadius = interpolate(scrollY.value, inputRange2Dim, [theme.raduis.large, theme.raduis.large * 1.5], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
 
         return {
             borderRadius
@@ -240,16 +201,16 @@ export const HeaderComponent = (props) => {
     });
 
     const animatedCompPos3 = useAnimatedStyle(() => {
-        const left = interpolate(scrollY.value, inputRange2, [padding, itemWidth / 2 + (padding * 3), itemWidth / 2 + (padding * 3)], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
-        const top = interpolate(scrollY.value, inputRange, [(3 * itemWidth / 4) + 5, 0], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+        const left = interpolate(scrollY.value, inputRange3Dim, [padding, itemWidth / 2 + (padding * 3), itemWidth / 2 + (padding * 3)], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+        const top = interpolate(scrollY.value, inputRange2Dim, [(3 * itemWidth / 4) + 5, 0], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
         return {
             top,
             left
         };
     });
     const animatedCompPos4 = useAnimatedStyle(() => {
-        const right = interpolate(scrollY.value, inputRange2, [padding, itemWidth / 2 + (padding * 3), itemWidth / 2 + (padding * 3)], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
-        const top = interpolate(scrollY.value, inputRange, [(3 * itemWidth / 4) + 5, 0], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+        const right = interpolate(scrollY.value, inputRange3Dim, [padding, itemWidth / 2 + (padding * 3), itemWidth / 2 + (padding * 3)], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+        const top = interpolate(scrollY.value, inputRange2Dim, [(3 * itemWidth / 4) + 5, 0], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
         return {
             top,
             right
@@ -260,7 +221,6 @@ export const HeaderComponent = (props) => {
 
 
     return (
-        // <AnimReact.View style={{ elevation, zIndex: 3, position: 'absolute', }}>
 
         <Animated.View style={[{ zIndex: 3, top: 100, width: compWidth, position: 'absolute', backgroundColor: 'white' }, animatedStyleContainer]}>
 
