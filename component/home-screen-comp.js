@@ -9,6 +9,8 @@ import Animated, {
     useSharedValue,
     withTiming,
     useAnimatedStyle,
+    interpolate,
+    Extrapolation,
 } from 'react-native-reanimated';
 
 
@@ -170,75 +172,123 @@ export const HeaderComponent = (props) => {
     const inputRange = [0, scrollSnap]
     const inputRange2 = [0, scrollSnap / 2, scrollSnap]
 
-    const animatedHeight1 = scrollY.interpolate({
-        inputRange: inputRange2,
-        outputRange: [itemWidth * 3 / 4, itemWidth * 3 / 10, itemWidth * 3 / 10],
-        extrapolate: 'clamp',
+    // const animatedHeight1 = scrollY.interpolate({
+    //     inputRange: inputRange2,
+    //     outputRange: [itemWidth * 3 / 4, itemWidth * 3 / 10, itemWidth * 3 / 10],
+    //     extrapolate: 'clamp',
+    // });
+
+    // const animatedWidth1 = scrollY.interpolate({
+    //     inputRange: inputRange2,
+    //     outputRange: [itemWidth, itemWidth / 2.5, itemWidth / 2.5],
+    //     extrapolate: 'clamp',
+    // });
+    // const animatedposX34 = scrollY.interpolate({
+    //     inputRange: inputRange2,
+    //     outputRange: [padding, itemWidth / 2 + (padding * 3), itemWidth / 2 + (padding * 3)],
+    //     extrapolate: 'clamp',
+    // });
+    // const animatedposY3 = scrollY.interpolate({
+    //     inputRange: inputRange,
+    //     outputRange: [(3 * itemWidth / 4) + 5, 0],
+    //     extrapolate: 'clamp',
+    // });
+    // const animatedHeightContainer = scrollY.interpolate({
+    //     inputRange: inputRange,
+    //     outputRange: [itemWidth * 3 / 2 + 10, itemWidth * 3 / 8],
+    //     extrapolate: 'clamp',
+    // });
+
+    // const animatCor = scrollY.interpolate({
+    //     inputRange: inputRange,
+    //     outputRange: [theme.raduis.large, theme.raduis.large * 1.5],
+    //     extrapolate: 'clamp',
+    // });
+    // const elevation = scrollY.interpolate({
+    //     inputRange: inputRange,
+    //     outputRange: [0, 2],
+    //     extrapolate: 'clamp',
+    // });
+
+
+    const animatedStyleContainer = useAnimatedStyle(() => {
+        const height = interpolate(scrollY.value, inputRange, [itemWidth * 3 / 2 + 10, itemWidth * 3 / 8], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+        const elevation = interpolate(scrollY.value, inputRange, [0, 2], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+        return {
+            height,
+            elevation
+        };
     });
 
-    const animatedWidth1 = scrollY.interpolate({
-        inputRange: inputRange2,
-        outputRange: [itemWidth, itemWidth / 2.5, itemWidth / 2.5],
-        extrapolate: 'clamp',
-    });
-    const animatedposX34 = scrollY.interpolate({
-        inputRange: inputRange2,
-        outputRange: [padding, itemWidth / 2 + (padding * 3), itemWidth / 2 + (padding * 3)],
-        extrapolate: 'clamp',
-    });
-    const animatedposY3 = scrollY.interpolate({
-        inputRange: inputRange,
-        outputRange: [(3 * itemWidth / 4) + 5, 0],
-        extrapolate: 'clamp',
-    });
-    const animatedHeightContainer = scrollY.interpolate({
-        inputRange: inputRange,
-        outputRange: [itemWidth * 3 / 2 + 10, itemWidth * 3 / 8],
-        extrapolate: 'clamp',
+    const animatedCompScale = useAnimatedStyle(() => {
+        const width = interpolate(scrollY.value, inputRange2, [itemWidth, itemWidth / 2.5, itemWidth / 2.5], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+        const height = interpolate(scrollY.value, inputRange2, [itemWidth * 3 / 4, itemWidth * 3 / 10, itemWidth * 3 / 10], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+
+        return {
+
+            width,
+            height,
+        };
     });
 
-    const animatCor = scrollY.interpolate({
-        inputRange: inputRange,
-        outputRange: [theme.raduis.large, theme.raduis.large * 1.5],
-        extrapolate: 'clamp',
+    const animatedCompRaduis = useAnimatedStyle(() => {
+        const borderRadius = interpolate(scrollY.value, inputRange, [theme.raduis.large, theme.raduis.large * 1.5], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+
+        return {
+            borderRadius
+        };
     });
-    const elevation = scrollY.interpolate({
-        inputRange: inputRange,
-        outputRange: [0, 2],
-        extrapolate: 'clamp',
+
+    const animatedCompPos3 = useAnimatedStyle(() => {
+        const left = interpolate(scrollY.value, inputRange2, [padding, itemWidth / 2 + (padding * 3), itemWidth / 2 + (padding * 3)], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+        const top = interpolate(scrollY.value, inputRange, [(3 * itemWidth / 4) + 5, 0], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+        return {
+            top,
+            left
+        };
     });
+    const animatedCompPos4 = useAnimatedStyle(() => {
+        const right = interpolate(scrollY.value, inputRange2, [padding, itemWidth / 2 + (padding * 3), itemWidth / 2 + (padding * 3)], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+        const top = interpolate(scrollY.value, inputRange, [(3 * itemWidth / 4) + 5, 0], { extrapolateLeft: Extrapolation.CLAMP, extrapolateRight: Extrapolation.CLAMP });
+        return {
+            top,
+            right
+        };
+    });
+
+
 
 
     return (
         // <AnimReact.View style={{ elevation, zIndex: 3, position: 'absolute', }}>
 
-        <AnimReact.View style={{ height: animatedHeightContainer, zIndex: 3, top: 100, width: compWidth, position: 'absolute', backgroundColor: 'white', elevation }}>
+        <Animated.View style={[{ zIndex: 3, top: 100, width: compWidth, position: 'absolute', backgroundColor: 'white' }, animatedStyleContainer]}>
 
-            <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', height: animatedHeight1, left: padding, borderRadius: animatCor }}>
+            <Animated.View style={[{ ...stylesHeaderComp.animateImage, overflow: 'hidden', marginLeft: padding }, animatedCompScale, animatedCompRaduis]}>
                 <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[0].id)}>
 
                     <Image source={{ uri: props.data[0].image }} style={{ ...stylesHeaderComp.image, zIndex: 0, width: '100%', height: "100%", resizeMode: 'contain' }} />
                 </TouchableOpacity>
-            </AnimReact.View>
-            <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', height: animatedHeight1, right: padding, borderRadius: animatCor }}>
+            </Animated.View>
+            <Animated.View style={[{ ...stylesHeaderComp.animateImage, overflow: 'hidden', right: padding }, animatedCompScale, animatedCompRaduis]}>
                 <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[1].id)}>
 
                     <Image source={{ uri: props.data[1].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%", resizeMode: 'contain' }} />
 
                 </TouchableOpacity>
-            </AnimReact.View>
-            <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', top: animatedposY3, height: animatedHeight1, left: animatedposX34, borderRadius: animatCor }}>
+            </Animated.View>
+            <Animated.View style={[{ ...stylesHeaderComp.animateImage, overflow: 'hidden' }, animatedCompRaduis, animatedCompScale, animatedCompPos3]}>
                 <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[2].id)}>
 
-                    <Image source={{ uri: props.data[2].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
+                    <Image source={{ uri: props.data[2].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%", resizeMode: 'contain' }} />
                 </TouchableOpacity>
-            </AnimReact.View>
-            <AnimReact.View style={{ ...stylesHeaderComp.animateImage, width: animatedWidth1, overflow: 'hidden', right: animatedposX34, height: animatedHeight1, top: animatedposY3, borderRadius: animatCor }}>
+            </Animated.View>
+            <Animated.View style={[{ ...stylesHeaderComp.animateImage, overflow: 'hidden' }, animatedCompRaduis, animatedCompScale, animatedCompPos4]}>
                 <TouchableOpacity activeOpacity={0.9} onPress={() => handleImageSelect(props.data[3].id)}>
-                    <Image source={{ uri: props.data[3].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%" }} />
+                    <Image source={{ uri: props.data[3].image }} style={{ ...stylesHeaderComp.image, width: '100%', height: "100%", resizeMode: 'contain' }} />
                 </TouchableOpacity>
-            </AnimReact.View>
-        </AnimReact.View >
+            </Animated.View>
+        </Animated.View >
         // </AnimReact.View>
     )
 }
@@ -252,34 +302,8 @@ export const stylesHeaderComp = StyleSheet.create({
     animateImage: {
         margin: 3,
         position: 'absolute',
-        borderRadius: theme.raduis.large,
-
     },
     image: {
-    },
-    image2: {
-        width: screenWidth / 2 - 10,
-        height: (screenWidth / 2 - 10) * 3 / 4,
-        borderRadius: theme.raduis.large,
-        position: 'absolute',
-        left: 10,
-        top: 10,
-    },
-    image3: {
-        width: screenWidth / 2 - 10,
-        height: (screenWidth / 2 - 10) * 3 / 4,
-        borderRadius: theme.raduis.large,
-        position: 'absolute',
-        left: 10,
-        top: 10,
-    },
-    image4: {
-        width: screenWidth / 2 - 10,
-        height: (screenWidth / 2 - 10) * 3 / 4,
-        borderRadius: theme.raduis.large,
-        position: 'absolute',
-        left: 10,
-        top: 10,
     }
 })
 

@@ -1,10 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import { Image, StyleSheet, Text, View, Dimensions, Button, Animated, VirtualizedList, FlatList } from "react-native";
+import { Image, StyleSheet, Text, View, Dimensions, Button, VirtualizedList, FlatList } from "react-native";
 import { CategoryCom, GridProductView, ScrollableRowList, MostProductsView, SearchBarHome, HeaderComponent, componentsHeight } from "../component/home-screen-comp";
 import { ScrollView } from "react-native-gesture-handler";
 import theme from "../theme";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated";
 const screenWidth = Dimensions.get('window').width;
 
 
@@ -58,12 +59,13 @@ export default function HomeScreen() {
     ]
 
 
-    const scrollY = useRef(new Animated.Value(0)).current;
+    const scrollY = useSharedValue(0);
     const scrollSnap = 200
-    const handleScroll = Animated.event(
-        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-        { useNativeDriver: false }
-    );
+    const handleScroll = useAnimatedScrollHandler({
+        onScroll: (event) => {
+            scrollY.value = event.contentOffset.y;
+        },
+    });
 
 
     return (
@@ -71,7 +73,7 @@ export default function HomeScreen() {
             <SearchBarHome />
             <HeaderComponent scrollY={scrollY} scrollSnap={scrollSnap} data={imageHeaderData} />
 
-            <ScrollView
+            <Animated.ScrollView
                 onScroll={handleScroll}
                 contentContainerStyle={{ paddingTop: 300 }}
                 scrollEventThrottle={32}
@@ -81,7 +83,7 @@ export default function HomeScreen() {
                 {homeScreenComponents.map((item, index) => (
                     <item.Comp key={index} />
                 ))}
-            </ScrollView>
+            </Animated.ScrollView>
 
             <StatusBar style="auto" />
         </View>
