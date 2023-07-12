@@ -36,7 +36,7 @@ export default function ProductScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <HeaderProduct scrollY={scrollY} />
+            <HeaderProduct scrollY={scrollY} product={product} />
             <ScrollView
                 onScroll={Animated.event(
                     [{ nativeEvent: { contentOffset: { y: scrollY } } }],

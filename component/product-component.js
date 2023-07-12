@@ -4,11 +4,13 @@ import ImageSlider from './imageSlider';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import theme from '../theme';
 import { useEffect, useRef, useState } from 'react';
 import { useDataFetching } from '../utils';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -20,18 +22,24 @@ export const HeaderProduct = (props) => {
         outputRange: [0, 1],
         extrapolate: 'clamp'
     })
-
+    const token = useSelector(state => state.auth.token)
     const [like, setLike] = useState(false)
 
     useEffect(() => {
-        //TODO get like status
-        setLike(false)
+
+        setLike(props.product.fav)
     }, [])
 
     const navigation = useNavigation()
 
     const handelLike = () => {
-        //TODO send request to make this product fav
+        fetch(`https://mdi80nz.pythonanywhere.com/api/add-product-fav/?product=${props.product.id}&liked=${!like ? 1 : 0}`, {
+            headers: {
+                'Authorization': 'Token ' + token
+            }
+        })
+            .then(res => console.log(res.status))
+            .catch(e => console.log(e.message))
         setLike(!like)
     }
     const handelClose = () => {
@@ -114,7 +122,7 @@ export const ProductDetails = ({ product }) => {
                 <View style={{ alignContent: 'center', flexDirection: 'row' }}>
                     <MaterialIcon style={{ color: theme.colors.primary, marginRight: 5 }} name="mode-comment" size={20} />
                     <Text style={{ color: theme.colors.primary, alignItems: 'center', justifyContent: 'center' }}>
-                        {product.comments} comment Over this product
+                        {product.comments} comments
                     </Text>
 
                 </View>
@@ -145,6 +153,7 @@ export const ProductColor = (props) => {
     const color_values = props.product.color_values
     const [selected, setSelected] = useState(0)
 
+    if (color_values.length == 0) return <View />
 
     return (
         <View style={{ marginTop: 40 }}>
@@ -233,31 +242,37 @@ export function CommentsProduct(props) {
     const itemWidth = 3 * screenWidth / 4
     const [data, setData] = useState([])
     const maxSizeOfComments = 5
-    const [showMore, setShowMore] = useState(false)
 
-
+    const GoAddCommentScreen = (e) => {
+        //TODO Launch add comment screen 
+    }
 
     useEffect(() => {
         if (props.comments.length > maxSizeOfComments) {
-            setShowMore(true)
-            setData([...props.comments.slice(0, maxSizeOfComments), { id: -1, showMore: true }])
-            console.log('here');
+            setData([...props.comments.slice(0, maxSizeOfComments), { id: -1 }])
 
+        } else if (props.comments.length == 0) {
+            setData([{ id: -2 }])
         } else {
-            setShowMore(false)
             setData(props.comments)
         }
     }, [])
 
     const renderItem = ({ item, index }) => {
         console.log(item);
-        if (item.showMore)
+        if (item.id == -1)
             return (
                 <View style={{ height: "100%", width: screenWidth / 4, justifyContent: 'center', alignItems: 'center' }}>
                     <Icon name="arrow-alt-circle-right" size={50} color={theme.colors.primary} />
                 </View>
             );
-
+        if (item.id == -2) {
+            return (
+                <View style={{ height: "100%", width: screenWidth, height: 250, justifyContent: 'center', alignItems: 'center' }}>
+                    <FontAwesome5 name="comment-slash" size={35} />
+                    <Text style={{ fontFamily: theme.typography.fontFamily, fontSize: theme.typography.fontSize.small }}> No Comments yet!</Text>
+                </View>)
+        }
         return (
             <CommentComp item={item} />
         )
@@ -265,15 +280,12 @@ export function CommentsProduct(props) {
 
     return (
         <>
-            {/* <View style={{}}>
-                {
-                    props.comments.map((item, index) => (
-                        <CommentComp item={item} />
-
-                    ))
-                }
-            </View> */}
-            <Text style={{ fontFamily: theme.typography.fontFamily, fontSize: theme.typography.fontSize.header, fontWeight: 'bold', padding: 20 }}>Comments</Text>
+            <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={{ flex: 5, fontFamily: theme.typography.fontFamily, fontSize: theme.typography.fontSize.header, fontWeight: 'bold', padding: 20 }}>Comments</Text>
+                <TouchableOpacity style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 20 }} onPress={GoAddCommentScreen}>
+                    <MaterialIcon name="add" color={theme.colors.primary} size={30} />
+                </TouchableOpacity>
+            </View>
             <FlatList
                 horizontal
                 style={{ backgroundColor: '#eee' }}
@@ -292,19 +304,41 @@ export function CommentsProduct(props) {
 export const CommentComp = (props) => {
 
     const likeStatusType = { like: 1, dislike: 0, noAction: -1 }
+    const token = useSelector(state => state.auth.token)
 
     const [likeStatus, setLikeStatus] = useState(props.item.likeStatus)
 
+    const sendAct = (act) => {
+        console.log(`https://mdi80nz.pythonanywhere.com/api/add-commnet-like/?comment=${props.item.id}&status=${act}`);
+        fetch(`https://mdi80nz.pythonanywhere.com/api/add-commnet-like/?comment=${props.item.id}&status=${act}`, {
+            headers: {
+                'Authorization': 'Token ' + token
+            }
+        })
+            .then(res => console.log(res.status))
+            .catch(e => console.log(e.message))
+    }
 
     const onLikeDislikePressed = (isLike) => {
-        //TODO send like or dislike comment for current user to api
 
         if (isLike) {
-            if (likeStatus === likeStatusType.like) setLikeStatus(likeStatusType.noAction)
-            else setLikeStatus(likeStatusType.like)
+            if (likeStatus === likeStatusType.like) {
+                setLikeStatus(likeStatusType.noAction)
+                sendAct(likeStatusType.noAction)
+            }
+            else {
+                setLikeStatus(likeStatusType.like)
+                sendAct(likeStatusType.like)
+            }
         } else {
-            if (likeStatus === likeStatusType.dislike) setLikeStatus(likeStatusType.noAction)
-            else setLikeStatus(likeStatusType.dislike)
+            if (likeStatus === likeStatusType.dislike) {
+                setLikeStatus(likeStatusType.noAction)
+                sendAct(likeStatusType.noAction)
+            }
+            else {
+                setLikeStatus(likeStatusType.dislike)
+                sendAct(likeStatusType.dislike)
+            }
 
         }
     }

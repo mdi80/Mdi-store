@@ -24,6 +24,19 @@ export async function loadUserSession() {
 }
 
 
+export const useSendData = (url) => {
+    const token = useSelector(state => state.auth.token)
+    const dispatch = useDispatch()
+    fetch(url, {
+        headers: {
+            'Authorization': 'Token ' + token
+        }
+    })
+        .then(res => res.json())
+        .then(json => console.log(JSON.stringify(json)))
+        .catch(e => console.log(e.message))
+
+}
 
 export const useDataFetching = (url, setData, setLenData = null) => {
     const token = useSelector(state => state.auth.token)
