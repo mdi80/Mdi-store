@@ -1,10 +1,7 @@
 import { StatusBar } from "expo-status-bar";
-import { Image, StyleSheet, Text, View, Dimensions, Button, VirtualizedList, FlatList } from "react-native";
+import { StyleSheet, Text, View, Dimensions } from "react-native";
 import { CategoryCom, GridProductView, ScrollableRowList, MostProductsView, SearchBarHome, HeaderComponent, componentsHeight } from "../component/home-screen-comp";
-import { ScrollView } from "react-native-gesture-handler";
 import theme from "../theme";
-import { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated";
 const screenWidth = Dimensions.get('window').width;
 

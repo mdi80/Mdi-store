@@ -36,9 +36,9 @@ export const useDataFetching = (url, setData) => {
             try {
                 const response = await fetch(url, {
                     method: 'GET',
-                    // headers: {
-                    //     'Authorization': 'Token ' + token
-                    // }
+                    headers: {
+                        'Authorization': 'Token ' + token
+                    }
                 });
                 if (!response.ok) {
                     throw new Error('Network response was not ok.');
