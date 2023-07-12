@@ -41,6 +41,7 @@ export const useDataFetching = (url, setData, setLenData = null) => {
                     }
                 });
                 if (!response.ok) {
+                    console.log(response.status);
                     throw new Error('Network response was not ok.');
                 }
 

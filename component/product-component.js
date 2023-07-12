@@ -104,16 +104,17 @@ export const ProductDetails = ({ product }) => {
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', paddingRight: 1, width: '100%' }}>
                     <Text style={{ flex: 15, fontSize: theme.typography.fontSize.header + 5, fontFamily: theme.typography.fontFamily, fontWeight: 'bold' }}>
-                        {product.title} {product.title} {product.title} {product.title}
+                        {product.title}
                     </Text>
-                    <MaterialIcon style={{ flex: 1, marginTop: 5, }} color={theme.colors.primary} name="fiber-new" size={20} />
-
+                    {product.isNew &&
+                        <MaterialIcon style={{ flex: 1, marginTop: 5, }} color={theme.colors.primary} name="fiber-new" size={20} />
+                    }
                 </View>
 
                 <View style={{ alignContent: 'center', flexDirection: 'row' }}>
                     <MaterialIcon style={{ color: theme.colors.primary, marginRight: 5 }} name="mode-comment" size={20} />
                     <Text style={{ color: theme.colors.primary, alignItems: 'center', justifyContent: 'center' }}>
-                        1000 comment Over this product
+                        {product.comments} comment Over this product
                     </Text>
 
                 </View>
@@ -170,18 +171,23 @@ export const ProductColor = (props) => {
 
 
 export function ProductDesc({ product }) {
-    const maxLine = 10
     const minLine = 3
-
-    const [numLines, setNumLines] = useState(3)
+    const [lines, setLines] = useState(0)
+    const handleTextLayout = (e) => {
+        const { lines } = e.nativeEvent;
+        setLines(lines.length)
+    }
+    const [numLines, setNumLines] = useState(minLine)
 
     return (
         <View style={{ padding: 20, marginTop: 20, }}>
             <Text style={{ fontFamily: theme.typography.fontFamily, fontSize: theme.typography.fontSize.header, fontWeight: 'bold' }}>Description</Text>
 
             <View style={{ alignItems: 'center' }}>
-                <Text style={{ color: '#757575', fontFamily: theme.typography.fontFamily }} numberOfLines={numLines}>{product.description}{product.description + " heel "}{product.description}{product.description}{product.description}{product.description}</Text>
-                <TouchableOpacity onPress={() => setNumLines((numLines === maxLine ? minLine : maxLine))} style={{ marginTop: 10, }} activeOpacity={1}><Text style={{ color: theme.colors.primary }}>{numLines == maxLine ? 'See less' : 'See More'}</Text></TouchableOpacity>
+                <Text style={{ textAlign: 'left', width: '100%', color: '#757575', fontFamily: theme.typography.fontFamily }} numberOfLines={numLines} onTextLayout={handleTextLayout}>{product.description}</Text>
+                {lines >= minLine &&
+                    <TouchableOpacity onPress={() => setNumLines((numLines === lines ? minLine : lines))} style={{ marginTop: 10, }} activeOpacity={1}><Text style={{ color: theme.colors.primary }}>{numLines == lines ? 'See less' : 'See More'}</Text></TouchableOpacity>
+                }
             </View>
         </View>
     )
@@ -190,10 +196,14 @@ export function ProductDesc({ product }) {
 
 
 export function ProductFeatures({ product }) {
-    // const [data, setData] = useState({})
-    // useDataFetching('',setData)
+    let data = {}
+    try {
+        data = JSON.parse(product.feature)
+    } catch { }
 
-    const data = { size: 'Large', material: 'Panabah', length: '180' }
+    console.log(data);
+    if (Object.keys(data).length == 0) return (<View></View>)
+
     return (
         <View style={{ padding: 20, marginTop: 20, }}>
             <Text style={{ fontFamily: theme.typography.fontFamily, fontSize: theme.typography.fontSize.header, fontWeight: 'bold' }}>Product Features</Text>
@@ -281,13 +291,10 @@ export function CommentsProduct(props) {
 
 export const CommentComp = (props) => {
 
-    const likeStatusType = { like: 1, dislike: 2, noAction: 0 }
+    const likeStatusType = { like: 1, dislike: 0, noAction: -1 }
 
-    const [likeStatus, setLikeStatus] = useState(likeStatusType.like)
+    const [likeStatus, setLikeStatus] = useState(props.item.likeStatus)
 
-    useEffect(() => {
-        setLikeStatus(likeStatusType.noAction) //TODO get like status of this user
-    }, [])
 
     const onLikeDislikePressed = (isLike) => {
         //TODO send like or dislike comment for current user to api
@@ -307,11 +314,11 @@ export const CommentComp = (props) => {
         <TouchableOpacity activeOpacity={1}>
             <View style={{ padding: 10, width: 3 * screenWidth / 4, backgroundColor: 'white', shadowOffset: 2, elevation: 6, marginLeft: 10, borderRadius: 10 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', margin: 20, paddingBottom: 10, }}>
-                    <Text style={{ fontFamily: theme.typography.fontFamily, fontSize: theme.typography.fontSize.header }}>{props.item.user}</Text>
+                    <Text style={{ fontFamily: theme.typography.fontFamily, fontSize: theme.typography.fontSize.header }}>{props.item.username}</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
-                        <Text style={{ color: '#757575', fontFamily: theme.typography.fontFamily, fontSize: theme.typography.fontSize.small, marginRight: 10 }}>{props.item.date}</Text>
-                        {props.item.like ?
+                        <Text style={{ color: '#757575', fontFamily: theme.typography.fontFamily, fontSize: theme.typography.fontSize.small, marginRight: 10 }}>{props.item.created}</Text>
+                        {props.item.isLiked ?
                             <AntDesign name="like1" color="#2E7D32" size={21} />
                             :
                             <AntDesign name="dislike1" color="#C62828" size={21} />
@@ -323,8 +330,7 @@ export const CommentComp = (props) => {
 
                 <View style={{ marginLeft: 40, marginRight: 20, paddingBottom: 10, height: 100 }}>
                     <Text style={{ color: "#757575", fontFamily: theme.typography.fontFamily }} numberOfLines={5}>
-                        {props.item.body}
-                        {props.item.body}
+                        {props.item.comment}
 
                     </Text>
                 </View>

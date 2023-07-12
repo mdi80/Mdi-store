@@ -5,6 +5,8 @@ import { AddToStoreBtn, CommentComp, CommentsProduct, HeaderProduct, ProductColo
 import ImageSlider from '../component/imageSlider'
 import { FlatList } from 'react-native-gesture-handler'
 import { MostProductsView } from '../component/home-screen-comp'
+import { BarIndicator } from 'react-native-indicators';
+import { useDataFetching } from '../utils'
 
 
 
@@ -17,23 +19,17 @@ export default function ProductScreen({ navigation, route }) {
     const { productId } = route.params
 
     const [product, setProduct] = React.useState(null)
+    const [comments, setComment] = React.useState(null)
 
-    //TODO get comments from api
-    const comments = [
-        { id: 2, user: 'Amin', date: '2022-12-04', like: true, body: "This product is very good for every one.This product is very good for every one.This product is very good for every one." },
-        { id: 3, user: 'Amin', date: '2022-12-04', like: true, body: "This product is very good for every two." },
-        { id: 4, user: 'Amin', date: '2022-12-04', like: true, body: "This product is very good for every one." },
-        { id: 5, user: 'Amin', date: '2022-12-04', like: false, body: "This product is very good for every one." },
-        { id: 6, user: 'Amin', date: '2022-12-04', like: true, body: "This product is very good for every one." },
-        { id: 7, user: 'Amin', date: '2022-12-04', like: false, body: "This product is very good for every one." },
-        { id: 8, user: 'Amin', date: '2022-12-04', like: true, body: "This product is very good for every one." },
-        { id: 9, user: 'Amin', date: '2022-12-04', like: true, body: "This product is very good for every one.This product is very good for every one." },
-    ]
 
-    if (!product)
+    useDataFetching(`https://mdi80nz.pythonanywhere.com/api/get-product/${productId}/`, setProduct)
+
+    useDataFetching(`https://mdi80nz.pythonanywhere.com/api/get-comments/?productId=${productId}`, setComment, (len) => { console.log(len) })
+
+    if (!product || !comments)
         return (
             <View style={styles.container}>
-                
+                <BarIndicator />
             </View>
         )
 
