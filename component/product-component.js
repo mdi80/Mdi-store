@@ -242,9 +242,9 @@ export function CommentsProduct(props) {
     const itemWidth = 3 * screenWidth / 4
     const [data, setData] = useState([])
     const maxSizeOfComments = 5
-
+    const navigation = useNavigation()
     const GoAddCommentScreen = (e) => {
-        //TODO Launch add comment screen 
+        navigation.navigate('AddComment', { productId: props.productId })
     }
 
     useEffect(() => {

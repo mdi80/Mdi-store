@@ -1,10 +1,11 @@
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import store from './store';
 import LoginScreen from './screens/login';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ActivityIndicator, Button, Image, StyleSheet, Text, View } from 'react-native';
 import SingupScreen from './screens/signup';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { loadUserSession } from './utils';
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
@@ -16,6 +17,8 @@ import ErrorScreen from './screens/errorScreen';
 import { setError } from './reducers/appReducer';
 import theme from './theme';
 import ProductScreen from './screens/product';
+import AddCommentScreen from './screens/addCommentScreen';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Stack = createStackNavigator()
 
@@ -28,7 +31,6 @@ function AppContainer() {
 
   dispatch = useDispatch()
   error = useSelector(state => state.app.networkError)
-
   //This useEffet Checks there is any token in storage and if exists send request to api to test the token
   useEffect(() => {
     const fetchdata = async () => {
@@ -63,7 +65,7 @@ function AppContainer() {
   }, [])
 
   return (
-    <NavigationContainer >
+    <NavigationContainer>
       {console.log(useSelector(state => state.auth.token))}
       {isLoading ?
         <View style={styles.container}>
@@ -96,6 +98,8 @@ function AppContainer() {
               <Stack.Screen name="Product" component={ProductScreen} options={{
                 headerShown: false
               }} />
+              <Stack.Screen name="AddComment" component={AddCommentScreen} options={{ title: 'Add Comment' }} />
+
 
             </>
           }

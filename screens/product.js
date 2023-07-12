@@ -52,7 +52,7 @@ export default function ProductScreen({ navigation, route }) {
                 <ProductDesc product={product} />
 
                 <ProductFeatures product={product} />
-                <CommentsProduct comments={comments} />
+                <CommentsProduct comments={comments} productId={product.id} />
                 <MostProductsView uri={`https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?categoryId=${product.productCategory}&sort-mostSale`} title="Most sales of category" />
             </ScrollView>
             <AddToStoreBtn product={product} />
