@@ -14,7 +14,9 @@ export default function ProductScreen({ navigation, route }) {
 
     const scrollY = React.useRef(new Animated.Value(0)).current
 
-    const { product } = route.params
+    const { productId } = route.params
+
+    const [product, setProduct] = React.useState(null)
 
     //TODO get comments from api
     const comments = [
@@ -27,6 +29,15 @@ export default function ProductScreen({ navigation, route }) {
         { id: 8, user: 'Amin', date: '2022-12-04', like: true, body: "This product is very good for every one." },
         { id: 9, user: 'Amin', date: '2022-12-04', like: true, body: "This product is very good for every one.This product is very good for every one." },
     ]
+
+    if (!product)
+        return (
+            <View style={styles.container}>
+                
+            </View>
+        )
+
+
     return (
         <View style={styles.container}>
             <HeaderProduct scrollY={scrollY} />
@@ -46,7 +57,7 @@ export default function ProductScreen({ navigation, route }) {
 
                 <ProductFeatures product={product} />
                 <CommentsProduct comments={comments} />
-                <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=5" title="Most sales of category" />
+                <MostProductsView uri={`https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?categoryId=${product.productCategory}&sort-mostSale`} title="Most sales of category" />
             </ScrollView>
             <AddToStoreBtn product={product} />
         </View>

@@ -3,7 +3,7 @@ import 'react'
 import { useState } from 'react';
 import { ActivityIndicator, Image, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setError } from '../reducers/appReducer';
 import Toast from 'react-native-toast-message';
 
@@ -12,9 +12,16 @@ const ErrorScreen = () => {
 
     const [tryagain, settryagain] = useState(false)
     const dispatch = useDispatch()
+    const token = useSelector(state => state.auth.token)
+
     const testConnectionToServer = () => {
         try {
-            fetch("https://mdi80nz.pythonanywhere.com/api/get-categories/").then(res => {
+            fetch("https://mdi80nz.pythonanywhere.com/api/get-categories/", {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Token ' + token
+                }
+            }).then(res => {
                 if (res.ok) {
                     dispatch(setError({ networkError: false }))
                 } else {

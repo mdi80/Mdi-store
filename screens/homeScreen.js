@@ -8,12 +8,20 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const screenWidth = Dimensions.get('window').width;
 
 
-const TitleViewScrollableList = () => (
+const TitleViewScrollableListAmazing = () => (
     <View style={styles.titleViewScrollableList}>
         <Text style={styles.titleViewScrollableList.text}>Amazing     </Text>
         <Text style={styles.titleViewScrollableList.text}>   Suggests </Text>
     </View>
 )
+
+const TitleViewScrollableListDiscount = () => (
+    <View style={styles.titleViewScrollableList}>
+        <Text style={styles.titleViewScrollableList.text}>Most     </Text>
+        <Text style={styles.titleViewScrollableList.text}>   Discount </Text>
+    </View>
+)
+
 
 
 const imageHeaderData = [
@@ -29,30 +37,30 @@ export default function HomeScreen() {
         { Comp: () => <CategoryCom urlItems="https://mdi80nz.pythonanywhere.com/api/get-categories/" />, height: componentsHeight.CategoryCom, key: 2 },
         {
             Comp: () => <ScrollableRowList
-                hadleTitleView={<TitleViewScrollableList />}
+                hadleTitleView={<TitleViewScrollableListAmazing />}
                 imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
-                urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=1"
+                urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing&endIndex=6"
                 backColor={theme.colors.primary}
 
             />, height: componentsHeight.ScrollableRowList, key: 3
         },
 
-        { Comp: () => <GridProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=2" title="Recent Products" subtitle="Based on Recent views" />, height: componentsHeight.GridProductView, key: 4 },
+        { Comp: () => <GridProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing&endIndex=9" title="Recent Products" subtitle="Based on Recent views" />, height: componentsHeight.GridProductView, key: 4 },
 
-        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=3" title="Most Viewed" />, height: componentsHeight.MostProductsView, key: 5 },
+        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?sort-mostView&endIndex=9" title="Most Viewed" />, height: componentsHeight.MostProductsView, key: 5 },
 
         {
             Comp: () => <ScrollableRowList
-                hadleTitleView={<TitleViewScrollableList />}
+                hadleTitleView={<TitleViewScrollableListDiscount />}
                 imageuri="https://www.digikala.com/statics/img/png/specialCarousel/box.png"
-                urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4"
+                urlItems="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?sort-lessExpensive&hasdiscount&endIndex=9"
                 backColor={theme.colors.secondary}
 
 
             />, height: componentsHeight.ScrollableRowList, key: 6
         },
-        { Comp: ({ data }) => <GridProductView data={data} url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=4" title="Digital Product" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 7 },
-        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=5" title="Top Sale" />, height: componentsHeight.GridProductView, key: 8 },
+        { Comp: ({ data }) => <GridProductView data={data} url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?endIndex=9" title="Digital Product" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 7 },
+        { Comp: () => <MostProductsView uri="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?sort-mostSale&endIndex=9" title="Top Sale" />, height: componentsHeight.GridProductView, key: 8 },
         { Comp: () => <GridProductView url="https://mdi80nz.pythonanywhere.com/api/get-product-with-param/?amazing?rows=6" title="Mobile" subtitle="Suggested Category" />, height: componentsHeight.RecentProductView, key: 9 },
 
     ]

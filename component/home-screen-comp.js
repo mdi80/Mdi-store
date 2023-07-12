@@ -288,7 +288,8 @@ export const ScrollableRowList = (props) => {
     const [loadingImage, setLoadingImage] = useState([])
 
     const [data, setData] = useState([])
-    useDataFetching(props.urlItems, setData)
+    const [allLenght, setLen] = useState(0)
+    useDataFetching(props.urlItems, setData, setLen)
     const [setLoadingItems, animatedStyle] = useLoadingAnim();
 
 
@@ -351,7 +352,7 @@ const ScrollableRowItem = ({ item, setLoadingImage, index }) => {
 
     const navigation = useNavigation()
     return (
-        <TouchableOpacity style={stylesScrollableRowList.itemView} activeOpacity={1} onPress={() => { navigation.navigate('Product', { product: item }) }}>
+        <TouchableOpacity style={stylesScrollableRowList.itemView} activeOpacity={1} onPress={() => { navigation.navigate('Product', { productId: item.id }) }}>
             <View>
                 <Image
                     source={{ uri: item.image[0].image }}
@@ -580,7 +581,8 @@ export const GridProductView = (props) => {
     const [setLoadingItems, animatedStyle] = useLoadingAnim();
 
     const [data, setData] = useState([])
-    useDataFetching(props.url, setData);
+    const [allLenght, setLen] = useState(0)
+    useDataFetching(props.url, setData, setLen);
     return (
         <Animated.View style={stylesGridProductView.container} >
             <Text style={stylesGridProductView.titleText}>{props.title}{"\n"}
@@ -662,7 +664,10 @@ export const MostProductsView = (props) => {
 
     const numberOfShow = 6
     const [data, setData] = useState([])
-    useDataFetching(props.uri, setData)
+    const [allLenght, setLen] = useState(0)
+
+    useDataFetching(props.uri, setData, setLen)
+
     const [setLoadingItems, animatedStyle] = useLoadingAnim();
 
     return (
